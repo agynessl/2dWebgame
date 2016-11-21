@@ -19,6 +19,15 @@ var server = http.createServer (function (req, res) {
     case '/js/scripts.js':
       sendFile(res, 'js/scripts.js', 'text/javascript')
       break
+    case '/img/entrance.png':
+      sendFile(res, 'img/entrance.png','image/png')
+      break
+    case '/img/final.png':
+      sendFile(res, 'img/final.png','image/png')
+      break
+    case '/img/gamepanel.png':
+      sendFile(res, 'img/gamepanel.png','image/png')
+      break
     default:
       res.end('404 not found')
   }
