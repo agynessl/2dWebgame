@@ -1,44 +1,54 @@
 <html lang="en">
 
   <head>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   <link rel="stylesheet" type="text/css" href="css/style.css"/>
   </head>
 
   <body>
-  	<h1> Game Design </h1>
-    <h2> Author: Jinan Hu & Qiaoyu Liao </h2>
-    
+    <div class="page-header col-sm-offset-1 col-sm-10">
+    	<h1> Game Design </h1>
+      <h2> Author: Jinan Hu & Qiaoyu Liao </h2>
+    </div>
 
+
+    <div class="col-sm-offset-1 col-sm-10 panel panel-default">
   	<h3> Overview: </h3>
-  	<p> XXX is a classic “Hop and Dodge” action game. It is quite similar to Varmintz Deluxe and Crossy Road. The player can use up, down, left and right keyboard inputs to control the main character to avoid enemies and to collect coins. The goal of the game is to achieve a high score within a certain amount of time. When the time is up, no matter of whether the player finish the game or not, the game score will be calculated and saved in the server. Moreover, the TOP 10 scores with their players’ names are displayed in the honor table.</p>
+  	<p> This is a classic “Hop and Dodge” action game. It is quite similar to Varmintz Deluxe and Crossy Road. The player can use up, down, left and right keyboard inputs to control the main character to avoid enemies and to collect coins. The goal of the game is to achieve a high score within a certain amount of time. When the time is up, no matter of whether the player finish the game or not, the game score will be calculated and saved in the server. Moreover, the TOP 10 scores with their players’ names are displayed in the honor table.</p>
+    </div>
 
-
-    <div>
+    <div class="col-sm-offset-1 col-sm-10">
     <img src="/img/entrance.png">
     <img src="/img/gamepanel.png">
     <img src="/img/final.png">
-    <div>
-    
-  	<h3> Specifications: </h3>
-  	<ol>
-  		<li> This game will be one-level endless encountered game. The game finishes when the character “died” or time has used up. The goal for the user is to go as far UP as possible and collect as many coins as possible. </li>
-  		<li> The basic design of the game will be based on the grid system of 10*25, the animal that the user control will take one square on the canvas. Each object like enemy or coin will also take one square. </li>
-  		<li>User uses the up, down, left, right arrow key to control the animal to move on the canvas. </li>
-  		<li>When the character encountered the enemy, falls into the river, or run over by a car, it is considered to be “dead”, hence the game ends.</li>
-  		<li>Or when the time specified(usually 60 seconds) is used up, the game ends.</li>
-  		<li>At the end of game, the score of this user get in this game will be calculated based on how far the character has moved in the map and how many coins it has collected. Each up distance is considered 1 point and each coins is considered 2 points.</li>
-  		<li>If the score user get is higher than the top ten score stored in the server, a box will be prompted to ask user’s name to store in the server.</li>
-  	</ol>
+    </div>
 
-  	<h3> Tools To Use </h3>
-  	<ul>
-  		<li>AJAX</li>
-  		<li>Node.js</li>
-  		<li>HTML5</li>
-  		<li>Phaser</li>
-  		<li>jQuery</li>
-  		<li>Heroku</li>
-  	</ul>
 
+    <div class="col-sm-offset-1 col-sm-10 panel panel-default">
+    	<h3> Specifications: </h3>
+    	<ol>
+    		<li> This game will be one-level endless encountered game. The game finishes when the character “died” or time has used up. The goal for the user is to go as far UP as possible and collect as many coins as possible. </li>
+    		<li> The basic design of the game will be based on the grid system of 10*15, the animal that the user control will take one square on the canvas. Each object like enemy or coin will also take one square. </li>
+    		<li>User uses the up, down, left, right arrow key to control the animal to move on the canvas. </li>
+    		<li>When the character encountered the enemy, falls into the river, or run over by a car, it is considered to be “dead”, hence the game ends.</li>
+    		<li>Or when the time specified(usually 60 seconds) is used up, the game ends.</li>
+    		<li>At the end of game, the score of this user get in this game will be calculated based on how far the character has moved in the map and how many coins it has collected. Each up distance is considered 1 point and each coins is considered 2 points.</li>
+    		<li>If the score user get is higher than the top ten score stored in the server, a box will be prompted to ask user’s name to store in the server.</li>
+    	</ol>
+    </div>
+
+    <div class="col-sm-offset-1 col-sm-10 panel panel-default">
+    	<h3> Tools To Use </h3>
+    	<ul>
+    		<li>AJAX</li>
+    		<li>Node.js</li>
+    		<li>HTML5</li>
+    		<li>Phaser</li>
+    		<li>jQuery</li>
+    		<li>Heroku</li>
+    	</ul>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </body>
 </html>
