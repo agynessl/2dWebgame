@@ -16,8 +16,20 @@ var server = http.createServer (function (req, res) {
     case '/css/style.css':
       sendFile(res, 'css/style.css', 'text/css')
       break
-    case '/js/scripts.js':
-      sendFile(res, 'js/scripts.js', 'text/javascript')
+    case '/phaser.min.js':
+      sendFile(res, 'phaser.min.js', 'text/javascript')
+      break
+    case '/js/boot.js':
+      sendFile(res, 'js/boot.js', 'text/javascript')
+      break
+    case '/js/game.js':
+      sendFile(res, 'js/game.js', 'text/javascript')
+      break
+    case '/js/play.js':
+      sendFile(res, 'js/play.js', 'text/javascript')
+      break
+    case '/js/load.js':
+      sendFile(res, 'js/load.js', 'text/javascript')
       break
     case '/img/entrance.png':
       sendFile(res, 'img/entrance.png','image/png')
