@@ -2,11 +2,11 @@ var loadState = {
 
     preload: function() { 
         // Add 'loading...' label
-        //var loading = game.add.text(game.width/2, game.height/2, 'loading...', { font: '30px Arial', fill: '#fff', align: 'center' })
-        //loading.anchor.setTo(0.5);
+        console.log('In loadState:preload');
+        
 
         // Load all images
-    	//game.load.image('player', 'assets/player.png');
+    	// game.load.image('player', 'assets/player.png');
         //game.load.spritesheet('enemies', 'assets/enemies.png', 52, 50);
 
         // Load sounds effects
@@ -17,3 +17,5 @@ var loadState = {
         game.state.start('play');
     },
 };
+
+

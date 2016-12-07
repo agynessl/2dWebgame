@@ -8,8 +8,8 @@ var bootState = {
         } 
 
         // Put the game on the middle of the screen
-        // game.scale.pageAlignHorizontally = true;
-        // game.scale.pageAlignVertically = true;
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
 
         // Game settings
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -18,6 +18,7 @@ var bootState = {
     },
 
     create: function() { 
-        game.state.start('load');
+        game.state.start('menu');
     },
 };
+

@@ -22,6 +22,9 @@ var server = http.createServer (function (req, res) {
     case '/js/boot.js':
       sendFile(res, 'js/boot.js', 'text/javascript')
       break
+    case '/js/menu.js':
+      sendFile(res, 'js/menu.js', 'text/javascript')
+      break
     case '/js/game.js':
       sendFile(res, 'js/game.js', 'text/javascript')
       break
@@ -30,15 +33,6 @@ var server = http.createServer (function (req, res) {
       break
     case '/js/load.js':
       sendFile(res, 'js/load.js', 'text/javascript')
-      break
-    case '/img/entrance.png':
-      sendFile(res, 'img/entrance.png','image/png')
-      break
-    case '/img/final.png':
-      sendFile(res, 'img/final.png','image/png')
-      break
-    case '/img/gamepanel.png':
-      sendFile(res, 'img/gamepanel.png','image/png')
       break
     default:
       res.end('404 not found')
