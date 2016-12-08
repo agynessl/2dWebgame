@@ -10,5 +10,9 @@
   "dependencies": {},
   "devDependencies": {
     "phaser-input": "^1.2.6"
+  },
+  "engines":{
+    "node": "4.2.6",
+    "npm": "3.5.2"
   }
 }

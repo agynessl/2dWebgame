@@ -8,10 +8,10 @@ var http = require('http')
 var server = http.createServer (function (req, res) {
   var uri = url.parse(req.url)
 
-  if(uri.method=='GET'){
-    handleGET(uri.pathname);
+  if(req.method=='GET'){
+    handleGET(uri.pathname,res);
   }
-  else if(uri.method=='POST'){
+  else if(req.method=='POST'){
     handlePOST(req,res);
   }
 
@@ -21,7 +21,7 @@ server.listen(process.env.PORT || port);
 console.log('listening on 8080')
 
 // subroutines
-function handleGET(path){
+function handleGET(path,res){
     switch(path) {
     case '/':
       sendFile(res, 'index.html')
