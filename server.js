@@ -22,7 +22,28 @@ console.log('listening on 8080')
 
 // subroutines
 function handleGET(path,res){
+    //TODO:an automatic sending file server!
+    // if(path=='/'){
+    //   sendFile(res, 'index.html')
+    // }
+    // else if(ch1=='m' & ch2=='d'){
+    //   sendFile(RES, path, 'text/markdown')
+    // }
+    // else{
+    //   res.end('404 not found')
+    // }
+
+
     switch(path) {
+    case '/assets/play.png':
+      sendFile(res, 'assets/play.png', 'image/png')
+      break
+    case '/assets/back.png':
+      sendFile(res, 'assets/back.png', 'image/png')
+      break
+    case '/assets/about.png':
+      sendFile(res, 'assets/about.png', 'image/png')
+      break
     case '/':
       sendFile(res, 'index.html')
       break
