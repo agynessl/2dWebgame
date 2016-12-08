@@ -31,7 +31,6 @@ var playState = {
         };
 
         this.player = game.add.sprite(200,300,'player');
-        game.physics.arcade.enable(this.player);
         this.player.animations.add('updown',[0, 1], 8, true);
         this.player.animations.add('left', [2, 3], 8, true);
         this.player.animations.add('right', [4, 5], 8, true);
@@ -40,9 +39,10 @@ var playState = {
         this.coin = game.add.sprite(100,200,'coin');
         this.coin.animations.add('normal', [0, 2], 4, true);
 
+
+        game.physics.arcade.enable(this.player);
         game.physics.arcade.enable(this.coin);
-        game.physics.arcade.overlap(this.player, this.coin, this.takeCoin,
-null, this);
+        
 
         this.stone = game.add.group();
         this.stone.enableBody = true;
@@ -51,7 +51,8 @@ null, this);
 
     update: function() {
         this.coin.animations.play('normal');
-
+        game.physics.arcade.overlap(this.player, this.coin, this.takecoin,
+null, this);
         //this.movePlayer();
     },
 
@@ -118,8 +119,9 @@ null, this);
  
     },
 
-    takeCoin: function(){
-        this.coing.kill();
+    takecoin: function(player,coin){
+        console.log('takeCoin')
+        this.coin.kill();
         this.score += 1;
         this.scoreLabel.text = 'score: ' + this.score;
     },
