@@ -1,5 +1,18 @@
 var change = 0;
 
+var map=[
+    "x                  x",
+    "x                  x",
+    "x   xxxx        o  x",
+    "x                  x",
+    "x                  x",
+    "x      o       x   x",
+    "x              x   x",
+    "x           xxxx   x",
+    "x   !              x",
+    "x                  x"];
+
+
 var playState = {
     preload: function(){
         console.log('In playState:preload');
@@ -34,7 +47,6 @@ var playState = {
         this.cursor.left.onDown.add(this.moveLeft, this);
         this.cursor.right.onDown.add(this.moveRight, this);
 
-
         this.wasd = {
           up: game.input.keyboard.addKey(Phaser.Keyboard.W),
           down: game.input.keyboard.addKey(Phaser.Keyboard.S),
@@ -48,19 +60,17 @@ var playState = {
         this.player.animations.add('left', [2, 3], 8, true);
         this.player.animations.add('right', [4, 5], 8, true);
 
-        this.coin = game.add.sprite(100,200,'coin');
-        this.coin.animations.add('normal', [0, 2], 4, true);
-D
 
         game.physics.arcade.enable(this.player);
-        game.physics.arcade.enable(this.coin);
         
-
-        this.stone = game.add.group();
-        this.stone.enableBody = true;
+        //add empty groups of entity
+        this.stones = game.add.group();
+        this.coins = game.add.group();
+        this.enemies = game.add.group();
 
         //every 0.1 second move 2 pixel
         this.timer = game.time.events.loop(100, this.changeperspective, this);
+        this.timer = game.time.events.loop(500, this.updateWord, this);
 
     },
 
@@ -68,7 +78,6 @@ D
 
         //this.world.setBounds( 0, 0, this.world.width, this.game.height  );
 
-        this.coin.animations.play('normal');
         game.physics.arcade.overlap(this.player, this.coin,
           this.takeCoin, null, this);
 
@@ -105,13 +114,47 @@ D
       this.player.x += 20;
       this.player.animations.play('right');
     },
-    addEnemy: function() {
 
+    addOneEnemy: function(x,y) {
+        // Create a coin at the position x and y
+        var anenemy = game.add.sprite(x, y, 'enemy');
+
+        // Add the coin to our previously created group
+        this.enemys.add(anenemy);
+
+        // Enable physics on the coin 
+        game.physics.arcade.enable(anenemy);
+
+        anenemy.checkWorldBounds = true;
+        anenemy.outOfBoundsKill = true;
     },
 
+    addOneCoin: function(x,y){
+        // Create a coin at the position x and y
+        var acoin = game.add.sprite(x, y, 'coin');
 
+        // Add the coin to our previously created group
+        this.coins.add(acoin);
 
- 
+        // Enable physics on the coin 
+        game.physics.arcade.enable(acoin);
+
+        acoin.checkWorldBounds = true;
+        acoin.outOfBoundsKill = true;
+    },
+
+    addOneStone: function(x,y){
+        // Create a coin at the position x and y
+        var astone = game.add.sprite(x, y, 'stone');
+
+        // Add the coin to our previously created group
+        this.stones.add(astone);
+
+        // Enable physics on the coin 
+        game.physics.arcade.enable(astone);
+
+        astone.checkWorldBounds = true;
+        astone.outOfBoundsKill = true;
     },
 
     takecoin: function(player,coin){
@@ -122,5 +165,31 @@ D
     },
 
     createWorld: function(){
+
+    },
+
+    updateWord: function(){
+        console.log('updateword');
+        console.log(map[this.lineindex])
+        this.lineindex=0;
+        for(var i=1;i<20;i++){
+            var char=map[this.lineindex][i];
+            if(char=='x'){
+                this.addOneStone(10*i,0);
+            }
+            else if(char=='o'){
+                this.addOneCoin(10*i,0);
+            }
+            else if(char=='!'){
+                this.addOneEnemy(10*i,0);
+            }
+        }
+        this.lineindex++;
+        if(this.lineindex==10){
+            this.lineindex==0;
+        }
+    }
+
+
 
 };
