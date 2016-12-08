@@ -1,14 +1,20 @@
 var loadState = {
 
-    preload: function() { 
-        // Add 'loading...' label
+    preload: function() {
+
+
         console.log('In loadState:preload');
+
+
+        game.load.spritesheet('playbutton', 'assets/play.png', 150, 100);
+      	game.load.spritesheet('backbutton', 'assets/back.png', 150, 100);
+      	game.load.spritesheet('aboutbutton', 'assets/about.png', 150, 100);
+        game.load.spritesheet('player','assets/character.png', 20, 20);  
+
 
     },
 
-    create: function() { 
-        game.state.start('play');
+    create: function() {
+        game.state.start('menu');
     }
 };
-
-

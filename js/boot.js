@@ -1,11 +1,11 @@
 var bootState = {
 
-    preload: function() { 
+    preload: function() {
         // Game scaling on mobile
         if (!game.device.desktop) {
             game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             game.scale.setMinMax(game.width/2, game.height/2, game.width, game.height);
-        } 
+        }
 
         // Put the game on the middle of the screen
         game.scale.pageAlignHorizontally = true;
@@ -17,8 +17,7 @@ var bootState = {
         game.stage.backgroundColor = '#ccfeff';
     },
 
-    create: function() { 
-        game.state.start('menu');
+    create: function() {
+        game.state.start('load');
     },
 };
-

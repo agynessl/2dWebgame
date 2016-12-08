@@ -44,6 +44,18 @@ function handleGET(path,res){
     case '/assets/about.png':
       sendFile(res, 'assets/about.png', 'image/png')
       break
+    case '/assets/character.png':
+      sendFile(res, 'assets/character.png', 'image/png')
+      break
+    case '/assets/enemy.png':
+      sendFile(res, 'assets/enemy.png', 'image/png')
+      break
+    case '/assets/stone.png':
+      sendFile(res, 'assets/stone.png', 'image/png')
+      break
+    case '/assets/coin.png':
+      sendFile(res, 'assets/coin.png', 'image/png')
+      break
     case '/':
       sendFile(res, 'index.html')
       break
@@ -79,6 +91,9 @@ function handleGET(path,res){
       break
     case '/js/load.js':
       sendFile(res, 'js/load.js', 'text/javascript')
+      break
+    case '/js/main.js':
+      sendFile(res, 'js/main.js', 'text/javascript')
       break
     case '/js/README.md':
       sendFile(res, 'README.md', 'text/markdown')
