@@ -1,29 +1,27 @@
 var menuState = {
     preload: function(){
-    	game.load.spritesheet('button', 'assets/button_sprite_sheet.png', 193, 71);
-
+    	game.load.spritesheet('playbutton', 'assets/play.png', 150, 100);
+    	game.load.spritesheet('backbutton', 'assets/back.png', 150, 100);
+    	game.load.spritesheet('aboutbutton', 'assets/about.png', 150, 100);
+    	
     	
 	},
 
     create: function(){
-    	game.add.button(game.width/2,game.height/2, 'button', this.entername, this, 2, 1, 0);
+    	game.add.button(125,150,'playbutton',this.inputname,this,0,1,2);
+    	game.add.button(125,350,'aboutbutton',this.displayabout,this,0,1,2);
     },
 
-    entername: function(){
-        game.state.start('load');
+    inputname: function(){
+    	document.querySelector('canvas').setAttribute('hidden',true);
+    	document.getElementById('input').removeAttribute('hidden');
+        // game.state.start('input');
+    },
+
+    displayabout: function(){
+    	game.state.start('about');
     }
+
 };
 
 
-var top10State = {
-	creat: function(){
-
-	},
-};
-
-
-var inputState = {
-	create: function(){
-
-	},
-};

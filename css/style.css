@@ -1,9 +1,22 @@
-div img{
-	width:30%;
-	margin: 0 auto;
+#username{
+	position: absolute;
+	text-align: center;
 }
 
-.panel{
-	margin-top: 20px;
-	margin-bottom: 20px;
+#input{
+	background-color: #ccfeff;
+	width: 400px;
+	height: 600px;
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#username{
+	width: 150px;
+	position: relative;
+	top: 200px;
+	left: 125px;
 }

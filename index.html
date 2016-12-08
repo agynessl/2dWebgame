@@ -9,15 +9,29 @@
   <script type="text/javascript" src="phaser.min.js"></script>
   <script type="text/javascript" src="js/boot.js"></script>
   <script type="text/javascript" src="js/load.js"></script>
+  <script type="text/javascript" src="js/play.js"></script> 
+  <script type="text/javascript" src="js/about.js"></script>
+  <script type="text/javascript" src="js/input.js"></script>
   <script type="text/javascript" src="js/menu.js"></script>
-  <script type="text/javascript" src="js/play.js"></script>  
+  <script type="text/javascript" src="js/top10.js"></script> 
   <script type="text/javascript" src="js/game.js"></script>
   </head>
 
   <body>
-  	
+  	<div id='input' hidden>
+  	<input class="form-control" placeholder="Name" type="text" id="username" autocomplete="off">
+  	<button type='button' onclick='sendusername()'>Submit</button>
+  	</div>
     <div class="gamepanel" id="gamediv" >
   </body>
 
- 
+  <script>
+  	function sendusername(){
+  		console.log('hi')
+  		console.log(document.getElementById('username').value)
+  		document.getElementById('input').setAttribute('hidden',true);
+    	document.querySelector('canvas').removeAttribute('hidden');
+  		game.state.start('play')
+  	}
+  </script> 
 </html>
