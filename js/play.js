@@ -4,9 +4,20 @@ var playState = {
     },
 
     create: function() { 
+        this.score = 0;
+        this.scoreLabel = game.add.text(10, 10, 'score: 0',
+{ font: '20px Arial', fill: '#826484' });
+
+
         this.coin = game.add.sprite(100,200,'coin');
-        game.physics.arcade.enable(this.coin);
         this.coin.animations.add('normal', [0, 2], 4, true);
+
+        game.physics.arcade.enable(this.coin);
+        game.physics.arcade.overlap(this.player, this.coin, this.takeCoin,
+null, this);
+
+        this.stone = game.add.group();
+        this.stone.enableBody = true;
 
     },
 
@@ -24,5 +35,15 @@ var playState = {
 
     addEnemy: function() {
  
+    },
+
+    takeCoin: function(){
+        this.coing.kill();
+        this.score += 1;
+        this.scoreLabel.text = 'score: ' + this.score;
+    },
+
+    createWorld: function(){
+
     }
 };
