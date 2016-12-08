@@ -79,7 +79,7 @@ function handlePOST(req,res){
     var post = qs.parse(body)
 
     if(post.username){
-
+      console.log('hi')
     }
   })
 }
