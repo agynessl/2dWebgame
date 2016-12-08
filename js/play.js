@@ -1,6 +1,6 @@
 var playState = {
     preload: function(){
-        console.log('In playstate');
+        console.log('In playState:preload');
     },
 
     create: function() { 
