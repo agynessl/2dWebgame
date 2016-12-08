@@ -3,8 +3,6 @@ var menuState = {
     	game.load.spritesheet('playbutton', 'assets/play.png', 150, 100);
     	game.load.spritesheet('backbutton', 'assets/back.png', 150, 100);
     	game.load.spritesheet('aboutbutton', 'assets/about.png', 150, 100);
-    	
-    	
 	},
 
     create: function(){
@@ -13,9 +11,9 @@ var menuState = {
     },
 
     inputname: function(){
-    	document.querySelector('canvas').setAttribute('hidden',true);
-    	document.getElementById('input').removeAttribute('hidden');
-        // game.state.start('input');
+    	//document.querySelector('canvas').setAttribute('hidden',true);
+    	//document.getElementById('input').removeAttribute('hidden');
+      // game.state.start('input');
     },
 
     displayabout: function(){
@@ -23,5 +21,3 @@ var menuState = {
     }
 
 };
-
-

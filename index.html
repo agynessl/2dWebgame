@@ -9,59 +9,23 @@
   <script type="text/javascript" src="phaser.min.js"></script>
   <script type="text/javascript" src="js/boot.js"></script>
   <script type="text/javascript" src="js/load.js"></script>
-  <script type="text/javascript" src="js/play.js"></script> 
+  <script type="text/javascript" src="js/play.js"></script>
   <script type="text/javascript" src="js/about.js"></script>
   <script type="text/javascript" src="js/input.js"></script>
   <script type="text/javascript" src="js/menu.js"></script>
-  <script type="text/javascript" src="js/top10.js"></script> 
+  <script type="text/javascript" src="js/top10.js"></script>
   <script type="text/javascript" src="js/game.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
   </head>
 
   <body>
+    <!--
   	<div id='input' hidden>
   	<input class="form-control" placeholder="Name" type="text" id="username" autocomplete="off">
   	<p></p>
   	<button type='button' onclick='storeusername()'>Submit</button>
   	</div>
     <div class="gamepanel" id="gamediv" >
+    -->
   </body>
-
-  <script>
-  	var name;
-    
-    function storeusername(){
-    	name = document.getElementById('username').value;
-    	if(name=='' || name==' '){
-    		name=='ananoymous';
-    	} 
-    	if(window.localStorage.getItem(name)){
-    		setTimeout(startplaying,1500);
-    		document.querySelector('p').innerText=name+"'s last score"+window.localStorage.getItem(name);
-    	}
-    	else{
-    		window.localStorage.setItem(name, 0);	
-    	} 	
-
-    	function startplaying(){
-	    	document.getElementById('input').setAttribute('hidden',true);
-		    document.querySelector('canvas').removeAttribute('hidden');
-		  	game.state.start('load')
-	  	}
-    }
-
-  	function gettop10(){
-  		console.log('hi')
-  		var http = new XMLHttpRequest();
-
-  		function event(){
-	  		
-		}
-
-		http.addEventListener("load", event);
-  		http.open('POST','/username',true);
-  		http.send('username='+document.getElementById('username').value)
-  	}
-
-
-  </script> 
 </html>
