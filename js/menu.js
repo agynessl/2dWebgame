@@ -14,6 +14,7 @@ var menuState = {
     	//document.querySelector('canvas').setAttribute('hidden',true);
     	//document.getElementById('input').removeAttribute('hidden');
       // game.state.start('input');
+      game.state.start('play');
     },
 
     displayabout: function(){
