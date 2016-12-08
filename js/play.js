@@ -1,7 +1,10 @@
 var playState = {
+    preload: function(){
+        console.log('In playstate');
+    },
 
     create: function() { 
-
+        
     },
 
     update: function() {
@@ -43,5 +46,5 @@ var playState = {
 
         // Add a tween to make it move toward the player
         game.add.tween(enemy).to({x: game.width/2}, 1200).start();
-    },
+    }
 };

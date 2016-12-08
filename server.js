@@ -1,6 +1,8 @@
 var http = require('http')
   , fs   = require('fs')
   , url  = require('url')
+  , qs = require('querystring')
+  , path = require('path')
   , port = 8080;
 
 var server = http.createServer (function (req, res) {
@@ -10,7 +12,7 @@ var server = http.createServer (function (req, res) {
     handleGET(uri.pathname)
   }
   else if(uri.method=='POST'){
-    handlePOST()
+    handlePOST(req,res)
   }
 
 })
@@ -65,8 +67,19 @@ function handleGET(path){
   }
 }
 
-function handlePOST(){
+function handlePOST(req,res){
+  var body = ''
 
+  req.on('data', function(d) {
+    body += d;
+  })
+
+  req.on('end', function(d) {
+    console.log(body)
+    var post = qs.parse(body)
+
+    if(post.username)
+  }
 }
 
 
