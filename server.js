@@ -68,20 +68,20 @@ function handleGET(path){
 }
 
 function handlePOST(req,res){
-  var body = ''
+  // var body = ''
 
-  req.on('data', function(d) {
-    body += d;
-  })
+  // req.on('data', function(d) {
+  //   body += d;
+  // })
 
-  req.on('end', function(d) {
-    console.log(body)
-    var post = qs.parse(body)
+  // req.on('end', function(d) {
+  //   console.log(body)
+  //   var post = qs.parse(body)
 
-    if(post.username){
-      console.log('hi')
-    }
-  })
+  //   if(post.username){
+  //     console.log('hi')
+  //   }
+  // })
 }
 
 
