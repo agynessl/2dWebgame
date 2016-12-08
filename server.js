@@ -9,10 +9,10 @@ var server = http.createServer (function (req, res) {
   var uri = url.parse(req.url)
 
   if(uri.method=='GET'){
-    handleGET(uri.pathname)
+    handleGET(uri.pathname);
   }
   else if(uri.method=='POST'){
-    handlePOST(req,res)
+    handlePOST(req,res);
   }
 
 })
@@ -78,8 +78,10 @@ function handlePOST(req,res){
     console.log(body)
     var post = qs.parse(body)
 
-    if(post.username)
-  }
+    if(post.username){
+
+    }
+  })
 }
 
 
