@@ -1,7 +1,7 @@
 var change = 0;
 
 var map=[
-    "x                  x",
+    "xxxxxxxxxxxxxxxxxxxx",
     "x                  x",
     "x   xxxx        o  x",
     "x                  x",
@@ -25,7 +25,7 @@ var playState = {
         { font: '20px Arial', fill: '#826484' });
         this.scoreLabel.fixedToCamera = true;
 
-
+        this.lineindex = 0;
 
        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
        this.scale.maxWidth = this.game.width;
@@ -60,11 +60,13 @@ var playState = {
         this.player.animations.add('updown',[0, 1], 8, true);
         this.player.animations.add('left', [2, 3], 8, true);
         this.player.animations.add('right', [4, 5], 8, true);
+        this.player.body.velocity.y = 10;
 
 
         this.coin = game.add.sprite(100,200,'coin');
         this.coin.animations.add('normal', [0, 2], 4, true);
         game.physics.arcade.enable(this.coin);
+        this.coin.body.velocity.y = 10;
 
 
         //add empty groups of entity
@@ -82,8 +84,8 @@ var playState = {
         this.stone.enableBody = true;
 
         //every 0.1 second move 2 pixel
-        this.timer = game.time.events.loop(100, this.changeperspective, this);
-        this.timer = game.time.events.loop(500, this.updateWord, this);
+        //this.timer = game.time.events.loop(100, this.changeperspective, this);
+        this.timer = game.time.events.loop(2000, this.updateWord, this);
 
     },
 
@@ -133,7 +135,7 @@ var playState = {
         var anenemy = game.add.sprite(x, y, 'enemy');
 
         // Add the coin to our previously created group
-        this.enemys.add(anenemy);
+        this.enemies.add(anenemy);
 
         // Enable physics on the coin
         game.physics.arcade.enable(anenemy);
@@ -165,6 +167,7 @@ var playState = {
 
         // Enable physics on the coin
         game.physics.arcade.enable(astone);
+        astone.body.velocity.y = 10;
 
         astone.checkWorldBounds = true;
         astone.outOfBoundsKill = true;
@@ -185,23 +188,23 @@ var playState = {
 
     updateWord: function(){
         console.log('updateword');
-        console.log(map[this.lineindex])
-        this.lineindex=0;
-        for(var i=1;i<20;i++){
+        // console.log(map[this.lineindex])
+        // this.lineindex=0;
+        for(var i=0;i<20;i+=1){
             var char=map[this.lineindex][i];
             if(char=='x'){
-                this.addOneStone(10*i,0);
+                this.addOneStone(20*i,0);
             }
             else if(char=='o'){
-                this.addOneCoin(10*i,0);
+                this.addOneCoin(20*i,0);
             }
             else if(char=='!'){
-                this.addOneEnemy(10*i,0);
+                this.addOneEnemy(20*i,0);
             }
         }
-        this.lineindex++;
+        this.lineindex+=1;
         if(this.lineindex==10){
-            this.lineindex==0;
+            this.lineindex=0;
         }
     },
 
