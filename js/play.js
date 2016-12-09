@@ -1,5 +1,5 @@
 var change = 0;
-
+var lineindex=0;
 var map=[
     "x                  x",
     "x                  x",
@@ -70,7 +70,7 @@ var playState = {
 
         //every 0.1 second move 2 pixel
         this.timer = game.time.events.loop(100, this.changeperspective, this);
-        this.timer = game.time.events.loop(500, this.updateWord, this);
+        this.timer = game.time.events.loop(3000, this.updateWord, this);
 
     },
 
@@ -120,7 +120,7 @@ var playState = {
         var anenemy = game.add.sprite(x, y, 'enemy');
 
         // Add the coin to our previously created group
-        this.enemys.add(anenemy);
+        this.enemies.add(anenemy);
 
         // Enable physics on the coin 
         game.physics.arcade.enable(anenemy);
@@ -170,23 +170,23 @@ var playState = {
 
     updateWord: function(){
         console.log('updateword');
-        console.log(map[this.lineindex])
-        this.lineindex=0;
-        for(var i=1;i<20;i++){
-            var char=map[this.lineindex][i];
+        console.log(lineindex)
+        console.log(map[lineindex])
+        for(var i=0;i<20;i+=1){
+            var char=map[lineindex][i];
             if(char=='x'){
-                this.addOneStone(10*i,0);
+                this.addOneStone(20*i,0);
             }
             else if(char=='o'){
-                this.addOneCoin(10*i,0);
+                this.addOneCoin(20*i,0);
             }
             else if(char=='!'){
-                this.addOneEnemy(10*i,0);
+                this.addOneEnemy(20*i,0);
             }
         }
-        this.lineindex++;
-        if(this.lineindex==10){
-            this.lineindex==0;
+        lineindex+=1;
+        if(lineindex==10){
+           lineindex=0;
         }
     }
 
