@@ -92,6 +92,9 @@ function handleGET(path,res){
     case '/js/load.js':
       sendFile(res, 'js/load.js', 'text/javascript')
       break
+    case '/js/map.js':
+      sendFile(res, 'js/map.js', 'text/javascript')
+      break
     case '/js/main.js':
       sendFile(res, 'js/main.js', 'text/javascript')
       break

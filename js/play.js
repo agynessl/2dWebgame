@@ -1,5 +1,6 @@
 var change = 0;
 var lineindex=0;
+var maxmap=3;
 var map=[
     "xxxxxxxxxxxxxxxxxxxx",
     "x                  x",
@@ -21,11 +22,12 @@ var playState = {
 
     create: function() {
         this.score = 0;
-        this.scoreLabel = game.add.text(10, 10, 'score: 0',
-        { font: '20px Arial', fill: '#826484' });
+        this.scoreLabel = game.add.text(10, 0, 'score: 0',
+        { font: '18px Arial', fill: '#826484' });
         this.scoreLabel.fixedToCamera = true;
 
         this.lineindex = 0;
+        this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
 
        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
        this.scale.maxWidth = this.game.width;
@@ -87,7 +89,7 @@ var playState = {
         //this.timer = game.time.events.loop(100, this.changeperspective, this);
         this.timer = game.time.events.loop(2000, this.updateWord, this);
 
-
+        this.createWorld();
     },
 
     update: function() {
@@ -183,7 +185,23 @@ var playState = {
     },
 
     createWorld: function(){
-
+        for(var k=0;k<3;k+=1){
+            for(var y=9;y>-1;y-=1){
+                for(var x=0;x<20;x+=1){
+                    var char = this.currentmap[y][x];
+                    if(char=='x'){
+                        this.addOneStone(20*x,20*y+k*200+20);
+                    }
+                    else if(char=='o'){
+                        this.addOneCoin(20*x,20*y+k*200+20);
+                    }
+                    else if(char=='!'){
+                        this.addOneEnemy(20*x,20*y+k*200+20);
+                    }
+                }    
+            }
+            this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)]
+        }
 
     },
 
@@ -193,13 +211,13 @@ var playState = {
         for(var i=0;i<20;i+=1){
             var char=map[this.lineindex][i];
             if(char=='x'){
-                this.addOneStone(20*i,0);
+                this.addOneStone(20*i,20);
             }
             else if(char=='o'){
-                this.addOneCoin(20*i,0);
+                this.addOneCoin(20*i,20);
             }
             else if(char=='!'){
-                this.addOneEnemy(20*i,0);
+                this.addOneEnemy(20*i,20);
             }
         }
 

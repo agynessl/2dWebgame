@@ -1,5 +1,5 @@
 
-var game = new Phaser.Game(400, 600, Phaser.CANVAS, 'gamediv');
+var game = new Phaser.Game(400, 620, Phaser.CANVAS, 'gamediv');
 
 
 
