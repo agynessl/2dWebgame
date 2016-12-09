@@ -58,7 +58,10 @@ var playState = {
         this.world.setBounds( 0, 0, 400, 620);
         game.physics.arcade.collide(this.player, this.stones);
         game.physics.arcade.overlap(this.player,this.coins,this.takecoin, null, this);
-        this.coins.callAll('play',null,'normal');
+
+        this.coins.forEach(function(coin){
+          coin.animations.play('normal');
+        });
 
     },
 
@@ -118,6 +121,7 @@ var playState = {
 
         // Enable physics on the coin
         game.physics.arcade.enable(acoin);
+        acoin.animations.add('normal', [0, 2], 4, true);
         acoin.body.velocity.y = 10;
 
         acoin.checkWorldBounds = true;
