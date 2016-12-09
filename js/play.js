@@ -1,7 +1,7 @@
 var change = 0;
 
 var map=[
-    "xxxxxxxxxxxxxxxxxxxx",
+    "x                  x",
     "x                  x",
     "x   xxxx        o  x",
     "x                  x",
@@ -25,7 +25,7 @@ var playState = {
         { font: '20px Arial', fill: '#826484' });
         this.scoreLabel.fixedToCamera = true;
 
-        this.lineindex = 0;
+        this.lineindex = 9;
 
        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
        this.scale.maxWidth = this.game.width;
@@ -57,31 +57,26 @@ var playState = {
 
         this.player = game.add.sprite(180,this.world.height - 20,'player');
         game.physics.arcade.enable(this.player);
+        this.player.body.collideWorldBounds.up = true;
+        this.player.body.collideWorldBounds.down = true;
+        this.player.body.collideWorldBounds.left = true;
+        this.player.body.collideWorldBounds.right = true;
         this.player.animations.add('updown',[0, 1], 8, true);
         this.player.animations.add('left', [2, 3], 8, true);
         this.player.animations.add('right', [4, 5], 8, true);
-        this.player.body.velocity.y = 10;
+        this.addVelocity(this.player);
 
 
         this.coin = game.add.sprite(100,200,'coin');
         this.coin.animations.add('normal', [0, 2], 4, true);
         game.physics.arcade.enable(this.coin);
-        this.coin.body.velocity.y = 10;
+        this.addVelocity(this.coin);
 
 
         //add empty groups of entity
         this.stones = game.add.group();
         this.coins = game.add.group();
         this.enemies = game.add.group();
-
-        this.stone = game.add.group();
-        this.stone.enableBody = true;
-
-        game.physics.arcade.enable(this.coin);
-
-
-        this.stone = game.add.group();
-        this.stone.enableBody = true;
 
         //every 0.1 second move 2 pixel
         //this.timer = game.time.events.loop(100, this.changeperspective, this);
@@ -93,16 +88,16 @@ var playState = {
 
         //this.world.setBounds( 0, 0, this.world.width, this.game.height  );
 
-        game.physics.arcade.overlap(this.player, this.coin,
+        game.physics.arcade.overlap(this.player, this.coins,
           this.takecoin, null, this);
+        game.physics.arcade.overlap(this.player, this.coin,
+            this.takecoin, null, this);
+        this.physics.arcade.overlap(this.player, this.enemies, this.enemycollision, null, this);
+        this.physics.arcade.overlap(this.player, this.stones, this.stonecollision, null, this);
+
 
     },
 
-    changeperspective: function(){
-      change -= 2;
-      this.world.setBounds( 0, change , this.world.width, this.game.height + change);
-      this.camera.y = change;
-    },
 
     updateScore: function() {
 
@@ -134,11 +129,12 @@ var playState = {
         // Create a coin at the position x and y
         var anenemy = game.add.sprite(x, y, 'enemy');
 
-        // Add the coin to our previously created group
-        this.enemies.add(anenemy);
-
         // Enable physics on the coin
         game.physics.arcade.enable(anenemy);
+        this.addVelocity(anenemy);
+
+        // Add the coin to our previously created group
+        this.enemies.add(anenemy);
 
         anenemy.checkWorldBounds = true;
         anenemy.outOfBoundsKill = true;
@@ -148,11 +144,14 @@ var playState = {
         // Create a coin at the position x and y
         var acoin = game.add.sprite(x, y, 'coin');
 
-        // Add the coin to our previously created group
-        this.coins.add(acoin);
-
         // Enable physics on the coin
         game.physics.arcade.enable(acoin);
+        this.addVelocity(acoin);
+        game.physics.arcade.overlap(this.player, acoin,
+          this.takecoin, null, this);
+
+        // Add the coin to our previously created group
+        this.coins.add(acoin);
 
         acoin.checkWorldBounds = true;
         acoin.outOfBoundsKill = true;
@@ -162,17 +161,20 @@ var playState = {
         // Create a coin at the position x and y
         var astone = game.add.sprite(x, y, 'stone');
 
-        // Add the coin to our previously created group
-        this.stones.add(astone);
-
         // Enable physics on the coin
         game.physics.arcade.enable(astone);
-        astone.body.velocity.y = 10;
+        this.addVelocity(astone);
+
+        // Add the coin to our previously created group
+        this.stones.add(astone);
 
         astone.checkWorldBounds = true;
         astone.outOfBoundsKill = true;
     },
 
+    addVelocity: function(item){
+        item.body.velocity.y = 10;
+    },
 
     takecoin: function(player,coin){
         console.log('takeCoin')
@@ -202,9 +204,9 @@ var playState = {
                 this.addOneEnemy(20*i,0);
             }
         }
-        this.lineindex+=1;
-        if(this.lineindex==10){
-            this.lineindex=0;
+        this.lineindex-=1;
+        if(this.lineindex==-1){
+            this.lineindex=9;
         }
     },
 
