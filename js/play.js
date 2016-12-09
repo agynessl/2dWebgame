@@ -63,31 +63,34 @@ var playState = {
     },
 
     movePlayer: function() {
-
-        this.player.body.velocity.y=10;
-        // If the left arrow key is pressed
         if (this.cursor.left.isDown) {
-            // Move the player to the left
-            // The velocity is in pixels per second
             this.player.body.velocity.x = -200;
+            this.player.body.velocity.y = 10;
+            this.player.animations.play('left');
         }
         // If the right arrow key is pressed
         else if (this.cursor.right.isDown) {
-            // Move the player to the right
             this.player.body.velocity.x = 200;
+            this.player.body.velocity.y = 10;
+            this.player.animations.play('right');
+        } 
+        // If the up arrow key is pressed and the player is on the ground
+        else if (this.cursor.up.isDown) {
+            this.player.body.velocity.x = 0;
+            this.player.body.velocity.y = -200;
+            this.player.animations.play('updown');
         }
-        // If neither the right or left arrow key is pressed
+        else if(this.cursor.down.isDown){            
+            this.player.body.velocity.x = 0;
+            this.player.body.velocity.y = 210;            
+            this.player.animations.play('updown');
+        }
+        // If none of the key is pressed
         else {
             // Stop the player
             this.player.body.velocity.x = 0;
-        }
-        // If the up arrow key is pressed and the player is on the ground
-        if (this.cursor.up.isDown) {
-            // Move the player upward (jump)
-            this.player.body.velocity.y = -200;
-        }
-        else if(this.cursor.down.isDown){
-            this.player.body.velocity.y = 220;
+            this.player.body.velocity.y=10;
+            this.player.animations.stop();
         }
     },
 
