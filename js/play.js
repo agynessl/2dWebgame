@@ -19,10 +19,11 @@ var playState = {
     },
 
 
-    create: function() { 
+    create: function() {
         this.score = 0;
         this.scoreLabel = game.add.text(10, 10, 'score: 0',
-{ font: '20px Arial', fill: '#826484' });
+        { font: '20px Arial', fill: '#826484' });
+        this.scoreLabel.fixedToCamera = true;
 
 
 
@@ -61,12 +62,24 @@ var playState = {
         this.player.animations.add('right', [4, 5], 8, true);
 
 
-        game.physics.arcade.enable(this.player);
-        
+        this.coin = game.add.sprite(100,200,'coin');
+        this.coin.animations.add('normal', [0, 2], 4, true);
+        game.physics.arcade.enable(this.coin);
+
+
         //add empty groups of entity
         this.stones = game.add.group();
         this.coins = game.add.group();
         this.enemies = game.add.group();
+
+        this.stone = game.add.group();
+        this.stone.enableBody = true;
+
+        game.physics.arcade.enable(this.coin);
+
+
+        this.stone = game.add.group();
+        this.stone.enableBody = true;
 
         //every 0.1 second move 2 pixel
         this.timer = game.time.events.loop(100, this.changeperspective, this);
@@ -79,7 +92,7 @@ var playState = {
         //this.world.setBounds( 0, 0, this.world.width, this.game.height  );
 
         game.physics.arcade.overlap(this.player, this.coin,
-          this.takeCoin, null, this);
+          this.takecoin, null, this);
 
     },
 
@@ -122,7 +135,7 @@ var playState = {
         // Add the coin to our previously created group
         this.enemys.add(anenemy);
 
-        // Enable physics on the coin 
+        // Enable physics on the coin
         game.physics.arcade.enable(anenemy);
 
         anenemy.checkWorldBounds = true;
@@ -136,7 +149,7 @@ var playState = {
         // Add the coin to our previously created group
         this.coins.add(acoin);
 
-        // Enable physics on the coin 
+        // Enable physics on the coin
         game.physics.arcade.enable(acoin);
 
         acoin.checkWorldBounds = true;
@@ -150,21 +163,23 @@ var playState = {
         // Add the coin to our previously created group
         this.stones.add(astone);
 
-        // Enable physics on the coin 
+        // Enable physics on the coin
         game.physics.arcade.enable(astone);
 
         astone.checkWorldBounds = true;
         astone.outOfBoundsKill = true;
     },
 
+
     takecoin: function(player,coin){
         console.log('takeCoin')
-        this.coin.kill();
+        coin.kill();
         this.score += 1;
         this.scoreLabel.text = 'score: ' + this.score;
     },
 
     createWorld: function(){
+
 
     },
 
@@ -188,8 +203,6 @@ var playState = {
         if(this.lineindex==10){
             this.lineindex==0;
         }
-    }
-
-
+    },
 
 };
