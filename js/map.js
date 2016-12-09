@@ -1,5 +1,5 @@
 var mapset=[[
-    "xxxxxxxxxxxxxxxxxxxx",
+    "xxxxxxxx        xxxx",
     "x                  x",
     "x   xxxx        o  x",
     "x                  x",

@@ -1,17 +1,5 @@
 var change = 0;
-var lineindex=0;
 var maxmap=3;
-var map=[
-    "xxxxxxxxxxxxxxxxxxxx",
-    "x                  x",
-    "x   xxxx        o  x",
-    "x                  x",
-    "x                  x",
-    "x      o       x   x",
-    "x              x   x",
-    "x           xxxx   x",
-    "x   !              x",
-    "x                  x"];
 
 
 var playState = {
@@ -21,116 +9,86 @@ var playState = {
 
 
     create: function() {
-        this.score = 0;
-        this.scoreLabel = game.add.text(10, 0, 'score: 0',
-        { font: '18px Arial', fill: '#826484' });
-        this.scoreLabel.fixedToCamera = true;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.maxWidth = this.game.width;
+        this.scale.maxHeight = this.game.height;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
+        //this.scale.setScreenSize( true );
 
-        this.lineindex = 0;
-        this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
+        this.initializeGadgets();
+        this.initializeEntities();
+        this.addAnimations();
 
-       this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-       this.scale.maxWidth = this.game.width;
-       this.scale.maxHeight = this.game.height;
-       this.scale.pageAlignHorizontally = true;
-       this.scale.pageAlignVertically = true;
-       //this.scale.setScreenSize( true );
-
-
-        //add key
-        this.cursor = game.input.keyboard.createCursorKeys();
-
-        game.input.keyboard.addKeyCapture(
-          [Phaser.Keyboard.UP, Phaser.Keyboard.DOWN,
-          Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT]
-        );
-
-        this.cursor.up.onDown.add(this.moveUp, this);
-        this.cursor.down.onDown.add(this.moveDown, this);
-        this.cursor.left.onDown.add(this.moveLeft, this);
-        this.cursor.right.onDown.add(this.moveRight, this);
-
-        this.wasd = {
-          up: game.input.keyboard.addKey(Phaser.Keyboard.W),
-          down: game.input.keyboard.addKey(Phaser.Keyboard.S),
-          left: game.input.keyboard.addKey(Phaser.Keyboard.A),
-          right: game.input.keyboard.addKey(Phaser.Keyboard.D)
-        };
-
-        this.player = game.add.sprite(180,this.world.height - 20,'player');
-        game.physics.arcade.enable(this.player);
-        this.player.animations.add('updown',[0, 1], 8, true);
-        this.player.animations.add('left', [2, 3], 8, true);
-        this.player.animations.add('right', [4, 5], 8, true);
-        this.player.body.velocity.y = 10;
-
-
-        this.coin = game.add.sprite(100,200,'coin');
-        this.coin.animations.add('normal', [0, 2], 4, true);
-        game.physics.arcade.enable(this.coin);
-        this.coin.body.velocity.y = 10;
-
-
-        //add empty groups of entity
-        this.stones = game.add.group();
-        this.coins = game.add.group();
-        this.enemies = game.add.group();
-
-        this.stone = game.add.group();
-        this.stone.enableBody = true;
-
-        game.physics.arcade.enable(this.coin);
-
-
-        this.stone = game.add.group();
-        this.stone.enableBody = true;
-
-
-        //this.timer = game.time.events.loop(100, this.changeperspective, this);
+        this.updateWord();
         this.timer = game.time.events.loop(2000, this.updateWord, this);
 
         this.createWorld();
     },
 
+    initializeGadgets: function(){
+        this.score = 0;
+        this.lineindex = 9;
+        this.scoreLabel = game.add.text(10, 0, 'score: 0',
+        { font: '18px Arial', fill: '#826484' });
+        this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
+                //add key
+        this.cursor = game.input.keyboard.createCursorKeys();
+    },
+
+    initializeEntities: function(){
+        this.player = game.add.sprite(180,600,'player');
+        game.physics.arcade.enable(this.player);
+        this.player.body.velocity.y = 10;
+        //add empty groups of entity
+        this.stones = game.add.group();
+        this.coins = game.add.group();
+        this.enemies = game.add.group();
+    },
+
+    addAnimations: function(){
+        this.player.animations.add('updown',[0, 1], 8, true);
+        this.player.animations.add('left', [2, 3], 8, true);
+        this.player.animations.add('right', [4, 5], 8, true);
+    },
+
     update: function() {
+        this.movePlayer();
 
-        //this.world.setBounds( 0, 0, this.world.width, this.game.height  );
-
-        game.physics.arcade.overlap(this.player, this.coin,
-          this.takecoin, null, this);
-
+        this.world.setBounds( 0, 0, 400, 620);
+        game.physics.arcade.collide(this.player, this.stones);
+        game.physics.arcade.overlap(this.player,this.coins,this.takecoin, null, this);
+        this.coins.callAll('play',null,'normal');
+        
     },
 
-    changeperspective: function(){
-      change -= 2;
-      this.world.setBounds( 0, change , this.world.width, this.game.height + change);
-      this.camera.y = change;
-    },
+    movePlayer: function() {
 
-    updateScore: function() {
-
-    },
-
-    gameOver: function() {
-
-    },
-
-    //move the player
-    moveUp: function(){
-      this.player.y -= 20;
-      this.player.animations.play('updown');
-    },
-    moveDown: function(){
-      this.player.y += 20;
-      this.player.animations.play('updown');
-    },
-    moveLeft: function(){
-      this.player.x -= 20;
-      this.player.animations.play('left');
-    },
-    moveRight: function(){
-      this.player.x += 20;
-      this.player.animations.play('right');
+        this.player.body.velocity.y=10;
+        // If the left arrow key is pressed
+        if (this.cursor.left.isDown) {
+            // Move the player to the left
+            // The velocity is in pixels per second
+            this.player.body.velocity.x = -200;
+        }
+        // If the right arrow key is pressed
+        else if (this.cursor.right.isDown) {
+            // Move the player to the right
+            this.player.body.velocity.x = 200;
+        }
+        // If neither the right or left arrow key is pressed
+        else {
+            // Stop the player
+            this.player.body.velocity.x = 0;
+        }
+        // If the up arrow key is pressed and the player is on the ground
+        if (this.cursor.up.isDown) {
+            // Move the player upward (jump)
+            this.player.body.velocity.y = -200;
+        }
+        else if(this.cursor.down.isDown){
+            this.player.body.velocity.y = 220;
+        }
     },
 
     addOneEnemy: function(x,y) {
@@ -139,10 +97,10 @@ var playState = {
 
         // Add the coin to our previously created group
         this.enemies.add(anenemy);
-
+        
         // Enable physics on the coin
         game.physics.arcade.enable(anenemy);
-
+        anenemy.body.velocity.y = 10;
         anenemy.checkWorldBounds = true;
         anenemy.outOfBoundsKill = true;
     },
@@ -150,12 +108,14 @@ var playState = {
     addOneCoin: function(x,y){
         // Create a coin at the position x and y
         var acoin = game.add.sprite(x, y, 'coin');
-
+        // acoin.animations.add('normal', [0, 2], 4, true);
+        
         // Add the coin to our previously created group
         this.coins.add(acoin);
 
         // Enable physics on the coin
         game.physics.arcade.enable(acoin);
+        acoin.body.velocity.y = 10;
 
         acoin.checkWorldBounds = true;
         acoin.outOfBoundsKill = true;
@@ -171,11 +131,10 @@ var playState = {
         // Enable physics on the coin
         game.physics.arcade.enable(astone);
         astone.body.velocity.y = 10;
-
+        astone.body.immovable = true;
         astone.checkWorldBounds = true;
         astone.outOfBoundsKill = true;
     },
-
 
     takecoin: function(player,coin){
         console.log('takeCoin')
@@ -209,7 +168,7 @@ var playState = {
         // console.log(map[this.lineindex])
         // this.lineindex=0;
         for(var i=0;i<20;i+=1){
-            var char=map[this.lineindex][i];
+            var char=this.currentmap[this.lineindex][i];
             if(char=='x'){
                 this.addOneStone(20*i,20);
             }
@@ -221,8 +180,9 @@ var playState = {
             }
         }
 
-        this.lineindex+=1;
-        if(this.lineindex==10){
+        this.lineindex-=1;
+        if(this.lineindex<0){
+            this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)];
             this.lineindex=0;
         }
     },
