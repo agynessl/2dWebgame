@@ -1,6 +1,5 @@
 var change = 0;
 var maxmap=3;
-var grav = 40;
 
 //add out of bound check
 //add enemy count
@@ -17,6 +16,10 @@ var playState = {
         this.scale.maxHeight = this.game.height;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
+
+        this.grav = 40;
+        this.coinsound = game.add.audio('coinsound');
+        this.hitsound = game.add.audio('hitsound');
         //this.scale.setScreenSize( true );
 
         this.initializeGadgets();
@@ -24,7 +27,7 @@ var playState = {
         this.addAnimations();
 
         this.updateWorld();
-        this.timer = game.time.events.loop(20000/grav, this.updateWorld, this);
+        this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
 
         this.createWorld();
     },
@@ -35,7 +38,7 @@ var playState = {
         this.lineindex = 9;
         this.scoreLabel = game.add.text(10, 0, 'score: 0',
         { font: '18px Arial', fill: '#826484' });
-        this.liveLabel = game.add.text(10, 15, 'live: 3',
+        this.liveLabel = game.add.text(10, 15, 'lives: 3',
         { font: '18px Arial', fill: '#826484' });
         this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
                 //add key
@@ -46,6 +49,8 @@ var playState = {
         this.player = game.add.sprite(180,600,'player');
         game.physics.arcade.enable(this.player);
         this.addGravity(this.player);
+        this.player.checkWorldBounds = true;
+        this.player.events.onOutOfBounds.add(this.gameOver, this);
         //add empty groups of entity
         this.stones = game.add.group();
         this.coins = game.add.group();
@@ -75,31 +80,31 @@ var playState = {
     movePlayer: function() {
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
-            this.player.body.velocity.y = grav;
+            this.player.body.velocity.y = this.grav;
             this.player.animations.play('left');
         }
         // If the right arrow key is pressed
         else if (this.cursor.right.isDown) {
             this.player.body.velocity.x = 200;
-            this.player.body.velocity.y = grav;
+            this.player.body.velocity.y = this.grav;
             this.player.animations.play('right');
         }
         // If the up arrow key is pressed and the player is on the ground
         else if (this.cursor.up.isDown) {
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y = -200 + grav;
+            this.player.body.velocity.y = -200 + this.grav;
             this.player.animations.play('updown');
         }
         else if(this.cursor.down.isDown){
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y = 200 + grav;
+            this.player.body.velocity.y = 200 + this.grav;
             this.player.animations.play('updown');
         }
         // If none of the key is pressed
         else {
             // Stop the player
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y= grav;
+            this.player.body.velocity.y= this.grav;
             this.player.animations.stop();
         }
     },
@@ -154,13 +159,21 @@ var playState = {
     takecoin: function(player,coin){
         console.log('takeCoin')
         coin.kill();
+        this.coinsound.play();
         this.score += 1;
         this.scoreLabel.text = 'score: ' + this.score;
     },
 
-    takelife: function(){
+    takelife: function(player, enemy){
+      enemy.kill();
+      this.hitsound.play();
       this.live -= 1;
-      this.liveLabel.text = 'live: ' + this.live;
+      this.liveLabel.text = 'lives: ' + this.live;
+
+
+      if(this.live < 1){
+        this.gameOver();
+      }
     },
 
     createWorld: function(){
@@ -185,7 +198,7 @@ var playState = {
     },
 
     addGravity: function(element){
-      element.body.velocity.y = grav;
+      element.body.velocity.y = this.grav;
     },
 
     updateWorld: function(){
@@ -209,6 +222,10 @@ var playState = {
             this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)];
             this.lineindex=9;
         }
+    },
+
+    gameOver: function(){
+        game.state.start('menu');
     },
 
 };

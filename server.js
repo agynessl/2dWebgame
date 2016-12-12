@@ -19,6 +19,7 @@ var server = http.createServer (function (req, res) {
 
 server.listen(process.env.PORT || port);
 console.log('listening on 8080')
+readList();
 
 // subroutines
 function handleGET(path,res){
@@ -55,6 +56,12 @@ function handleGET(path,res){
       break
     case '/assets/coin.png':
       sendFile(res, 'assets/coin.png', 'image/png')
+      break
+    case '/assets/coin.mp3':
+      sendFile(res, 'assets/coin.mp3', 'audio/mp3')
+      break
+    case '/assets/hit.mp3':
+      sendFile(res, 'assets/hit.mp3', 'audio/mp3')
       break
     case '/':
       sendFile(res, 'index.html')
@@ -121,6 +128,19 @@ function handlePOST(req,res){
   //     console.log('hi')
   //   }
   // })
+}
+
+function readList(){
+  var content = fs.readFileSync('top10.json');
+  var namelist = JSON.parse(content);
+
+  //sort the list by descending order
+  namelist.sort(function(a,b){
+    return b.score - a.score
+  });
+
+  console.log(namelist[0].name);
+  console.log(namelist[0].score);
 }
 
 
