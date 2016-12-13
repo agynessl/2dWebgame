@@ -24,9 +24,10 @@ var playState = {
 
         this.initializeGadgets();
         this.initializeEntities();
+        this.addEmitter();
         this.addAnimations();
 
-        this.updateWorld();
+        
         this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
 
         this.createWorld();
@@ -40,7 +41,7 @@ var playState = {
         { font: '18px Arial', fill: '#826484' });
         this.liveLabel = game.add.text(10, 15, 'lives: 3',
         { font: '18px Arial', fill: '#826484' });
-        this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
+        this.currentmap = initialMap;
                 //add key
         this.cursor = game.input.keyboard.createCursorKeys();
     },
@@ -55,6 +56,17 @@ var playState = {
         this.stones = game.add.group();
         this.coins = game.add.group();
         this.enemies = game.add.group();
+        this.healthpack = game.add.group();
+        this.star = game.add.group();
+    },
+
+    addEmitter: function(){
+    	this.bloodyeffect = game.add.emitter(0, 0, 15);
+    	this.bloodyeffect.makeParticles('blood');
+		this.bloodyeffect.setYSpeed(-150, 150);
+		this.bloodyeffect.setXSpeed(-150, 150);
+		this.bloodyeffect.setScale(2, 0, 2, 0, 800);
+		this.bloodyeffect.gravity = 0;
     },
 
     addAnimations: function(){
@@ -165,10 +177,13 @@ var playState = {
     },
 
     takelife: function(player, enemy){
-      enemy.kill();
-      this.hitsound.play();
-      this.live -= 1;
-      this.liveLabel.text = 'lives: ' + this.live;
+     	enemy.kill();
+     	this.bloodyeffect.x = player.x;
+     	this.bloodyeffect.y = player.y;
+		this.bloodyeffect.start(true, 800, null, 15);
+		this.hitsound.play();
+		this.live -= 1;
+		this.liveLabel.text = 'lives: ' + this.live;
 
 
       if(this.live < 1){
@@ -229,3 +244,16 @@ var playState = {
     },
 
 };
+
+
+var initialMap = [
+	"x                  x",
+    "x                  x",
+    "x          !       x",
+    "x                  x",
+    "x    o             x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x"];
