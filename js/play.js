@@ -1,5 +1,5 @@
 var change = 0;
-var maxmap=3;
+var maxmap=9;
 
 //add out of bound check
 //add enemy count
@@ -46,7 +46,7 @@ var playState = {
     },
 
     initializeEntities: function(){
-        this.player = game.add.sprite(180,600,'player');
+        this.player = game.add.sprite(180,450,'player');
         game.physics.arcade.enable(this.player);
         this.addGravity(this.player);
         this.player.checkWorldBounds = true;
