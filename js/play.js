@@ -1,6 +1,8 @@
 var change = 0;
 var maxmap=3;
 
+//add out of bound check
+//add enemy count
 
 var playState = {
     preload: function(){
@@ -14,22 +16,29 @@ var playState = {
         this.scale.maxHeight = this.game.height;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
+
+        this.grav = 40;
+        this.coinsound = game.add.audio('coinsound');
+        this.hitsound = game.add.audio('hitsound');
         //this.scale.setScreenSize( true );
 
         this.initializeGadgets();
         this.initializeEntities();
         this.addAnimations();
 
-        this.updateWord();
-        this.timer = game.time.events.loop(2000, this.updateWord, this);
+        this.updateWorld();
+        this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
 
         this.createWorld();
     },
 
     initializeGadgets: function(){
         this.score = 0;
+        this.live = 3;
         this.lineindex = 9;
         this.scoreLabel = game.add.text(10, 0, 'score: 0',
+        { font: '18px Arial', fill: '#826484' });
+        this.liveLabel = game.add.text(10, 15, 'lives: 3',
         { font: '18px Arial', fill: '#826484' });
         this.currentmap = mapset[game.rnd.integerInRange(0,maxmap)];
                 //add key
@@ -39,7 +48,9 @@ var playState = {
     initializeEntities: function(){
         this.player = game.add.sprite(180,600,'player');
         game.physics.arcade.enable(this.player);
-        this.player.body.velocity.y = 10;
+        this.addGravity(this.player);
+        this.player.checkWorldBounds = true;
+        this.player.events.onOutOfBounds.add(this.gameOver, this);
         //add empty groups of entity
         this.stones = game.add.group();
         this.coins = game.add.group();
@@ -57,7 +68,8 @@ var playState = {
 
         this.world.setBounds( 0, 0, 400, 620);
         game.physics.arcade.collide(this.player, this.stones);
-        game.physics.arcade.overlap(this.player,this.coins,this.takecoin, null, this);
+        game.physics.arcade.collide(this.player, this.enemies, this.takelife, null, this);
+        game.physics.arcade.overlap(this.player,this.coins, this.takecoin, null, this);
 
         this.coins.forEach(function(coin){
           coin.animations.play('normal');
@@ -68,31 +80,31 @@ var playState = {
     movePlayer: function() {
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
-            this.player.body.velocity.y = 10;
+            this.player.body.velocity.y = this.grav;
             this.player.animations.play('left');
         }
         // If the right arrow key is pressed
         else if (this.cursor.right.isDown) {
             this.player.body.velocity.x = 200;
-            this.player.body.velocity.y = 10;
+            this.player.body.velocity.y = this.grav;
             this.player.animations.play('right');
         }
         // If the up arrow key is pressed and the player is on the ground
         else if (this.cursor.up.isDown) {
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y = -200;
+            this.player.body.velocity.y = -200 + this.grav;
             this.player.animations.play('updown');
         }
         else if(this.cursor.down.isDown){
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y = 210;
+            this.player.body.velocity.y = 200 + this.grav;
             this.player.animations.play('updown');
         }
         // If none of the key is pressed
         else {
             // Stop the player
             this.player.body.velocity.x = 0;
-            this.player.body.velocity.y=10;
+            this.player.body.velocity.y= this.grav;
             this.player.animations.stop();
         }
     },
@@ -106,7 +118,8 @@ var playState = {
 
         // Enable physics on the coin
         game.physics.arcade.enable(anenemy);
-        anenemy.body.velocity.y = 10;
+        this.addGravity(anenemy);
+        anenemy.body.immovable = true;
         anenemy.checkWorldBounds = true;
         anenemy.outOfBoundsKill = true;
     },
@@ -122,7 +135,7 @@ var playState = {
         // Enable physics on the coin
         game.physics.arcade.enable(acoin);
         acoin.animations.add('normal', [0, 2], 4, true);
-        acoin.body.velocity.y = 10;
+        this.addGravity(acoin);
 
         acoin.checkWorldBounds = true;
         acoin.outOfBoundsKill = true;
@@ -137,7 +150,7 @@ var playState = {
 
         // Enable physics on the coin
         game.physics.arcade.enable(astone);
-        astone.body.velocity.y = 10;
+        this.addGravity(astone);
         astone.body.immovable = true;
         astone.checkWorldBounds = true;
         astone.outOfBoundsKill = true;
@@ -146,8 +159,21 @@ var playState = {
     takecoin: function(player,coin){
         console.log('takeCoin')
         coin.kill();
+        this.coinsound.play();
         this.score += 1;
         this.scoreLabel.text = 'score: ' + this.score;
+    },
+
+    takelife: function(player, enemy){
+      enemy.kill();
+      this.hitsound.play();
+      this.live -= 1;
+      this.liveLabel.text = 'lives: ' + this.live;
+
+
+      if(this.live < 1){
+        this.gameOver();
+      }
     },
 
     createWorld: function(){
@@ -171,7 +197,11 @@ var playState = {
 
     },
 
-    updateWord: function(){
+    addGravity: function(element){
+      element.body.velocity.y = this.grav;
+    },
+
+    updateWorld: function(){
         // console.log(map[this.lineindex])
         // this.lineindex=0;
         for(var i=0;i<20;i+=1){
@@ -190,8 +220,12 @@ var playState = {
         this.lineindex-=1;
         if(this.lineindex<0){
             this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)];
-            this.lineindex=0;
+            this.lineindex=9;
         }
+    },
+
+    gameOver: function(){
+        game.state.start('menu');
     },
 
 };

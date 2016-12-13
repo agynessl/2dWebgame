@@ -26,7 +26,7 @@ function gettop10(){
 
   function event(){
 
-}
+  }
 
 http.addEventListener("load", event);
   http.open('POST','/username',true);
