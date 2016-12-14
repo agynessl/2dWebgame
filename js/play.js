@@ -1,4 +1,3 @@
-var maxmap=9;
 var direction = ['d','a','s','w'];
 //add out of bound check
 //add enemy count
@@ -16,8 +15,7 @@ var playState = {
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
 
-        this.grav = 40;
-        this.enemymovingspeed = 100;
+
         this.coinsound = game.add.audio('coinsound');
         this.hitsound = game.add.audio('hitsound');
         //this.scale.setScreenSize( true );
@@ -27,24 +25,36 @@ var playState = {
         this.addEmitter();
         this.addAnimations();
 
-        
-        this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
-        this.timer = game.time.events.loop(20000, this.addOneHealthPack, this);
-      	this.timer = game.time.events.loop(5000, this.changeEnemyMovingDirection,this);
-        
         this.createWorld();
+        this.updateWorldEvent = game.time.now+this.updateWorldTime;
+        this.AddHealthPackEvent = game.time.now+this.changeDirectionTime;
+        this.changeDirectionEvent = game.time.now+this.healthRespawnTime;
+        this.nextModeEvent = game.time.now+this.nextModeTime;
+        
     },
 
     initializeGadgets: function(){
+    	this.easymap = 9;
+    	this.mediummap = 9;
+    	//TO BE CONTINUE
         this.score = 0;
         this.live = 3;
         this.lineindex = 9;
+        this.grav = 40;
+        this.enemymovingspeed = 100;
+        this.healthRespawnTime = 20000;
+        this.updateWorldTime = 20000/this.grav;
+        this.changeDirectionTime = 3000;
+        this.nextModeTime = 30000;
+        this.initialTime = game.time.now;
+        this.mode = 0;
         this.scoreLabel = game.add.text(10, 0, 'score: 0',
         { font: '18px Arial', fill: '#826484' });
         this.heartImage = game.add.image(340,0,'heart');
         this.liveLabel = game.add.text(365, 0, 'x '+this.live,
         { font: '18px Arial', fill: '#826484' });
-        this.currentmap = initialMap;
+        this.timeLabel = game.add.text(175, 0, 'Time:'+0,
+        { font: '18px Arial', fill: '#826484' });
                 //add key
         this.cursor = game.input.keyboard.createCursorKeys();
     },
@@ -79,8 +89,8 @@ var playState = {
     },
 
     update: function() {
+        this.timeLabel.text = 'Time: '+Math.floor((game.time.now-this.initialTime)/1000);
         this.movePlayer();
-
         this.world.setBounds( 0, 0, 400, 620);
         game.physics.arcade.collide(this.player, this.stones);
         game.physics.arcade.collide(this.stones, this.enemies, this.changeDirectionWhenCollideWall, null, this);
@@ -94,6 +104,30 @@ var playState = {
           coin.animations.play('normal');
         });
 
+        this.updateEvents();
+    },
+
+    updateEvents: function(){
+    	if(this.updateWorldEvent<game.time.now){
+    		this.updateWorld();
+    		this.updateWorldEvent+=this.updateWorldTime;
+    	}
+    	if(this.AddHealthPackEvent<game.time.now){
+    		this.addOneHealthPack();
+    		this.AddHealthPackEvent+=this.healthRespawnTime;
+    	}
+    	if(this.changeDirectionEvent<game.time.now){
+    		this.changeEnemyMovingDirection();
+    		this.changeDirectionEvent+=this.changeDirectionTime;
+    	}
+    	if(this.nextModeEvent<game.time.now){
+    		this.nextModeEvent+=this.nextModeTime;
+    		if(this.mode<3) this.mode+=1;
+    	}
+    	if(this.mode>0){
+    		game.physics.arcade.overlap(this.enemies,this.coins,this.killObject,null,this);	
+    	}
+    		
     },
 
     movePlayer: function() {
@@ -287,24 +321,21 @@ var playState = {
     },
 
     createWorld: function(){
-        for(var k=0;k<3;k+=1){
-            for(var y=9;y>-1;y-=1){
-                for(var x=0;x<20;x+=1){
-                    var char = this.currentmap[y][x];
-                    if(char=='x'){
-                        this.addOneStone(20*x,20*y+k*200+20);
-                    }
-                    else if(char=='o'){
-                        this.addOneCoin(20*x,20*y+k*200+20);
-                    }
-                    else if(char=='!'){
-                        this.addOneEnemy(20*x,20*y+k*200+20);
-                    }
-                }
-            }
-            this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)]
+        for(var x=0;x<20;x+=1){
+        	for(var y=0;y<30;y+=1){
+        		var char = initialMap[y][x];
+	            if(char=='x'){
+	                this.addOneStone(20*x,20*y);
+	            }
+	            else if(char=='o'){
+	                this.addOneCoin(20*x,20*y);
+	            }
+	            else if(char=='!'){
+	                this.addOneEnemy(20*x,20*y);
+	            }        		
+        	}
         }
-
+        this.currentmap=mapset[this.mode][game.rnd.integerInRange(0,this.easymap)]
     },
 
     addGravity: function(element){
@@ -312,8 +343,6 @@ var playState = {
     },
 
     updateWorld: function(){
-        // console.log(map[this.lineindex])
-        // this.lineindex=0;
         for(var i=0;i<20;i+=1){
             var char=this.currentmap[this.lineindex][i];
             if(char=='x'){
@@ -329,7 +358,7 @@ var playState = {
 
         this.lineindex-=1;
         if(this.lineindex<0){
-            this.currentmap=mapset[game.rnd.integerInRange(0,maxmap)];
+       		this.currentmap=mapset[this.mode][game.rnd.integerInRange(0,this.easymap)];         
             this.lineindex=9;
         }
     },
@@ -344,11 +373,31 @@ var playState = {
 var initialMap = [
 	"x                  x",
     "x                  x",
-    "x          !       x",
-    "x                  x",
-    "x    o             x",
     "x                  x",
     "x                  x",
+    "x               !  x",
     "x                  x",
     "x                  x",
-    "x                  x"];
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x  o     o   o     x",
+    "x  o     o   o     x",
+    "x  o o o o   o     x",
+    "x  o     o   o     x",
+    "x  o     o   o     x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",
+    "x                  x",];
