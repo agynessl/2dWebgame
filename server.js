@@ -123,6 +123,9 @@ function handleGET(path,res){
     case '/js/README.md':
       sendFile(res, 'README.md', 'text/markdown')
       break
+    case '/top10list':
+      sendList(res)
+      break
     default:
       res.end('404 not found')
   }
@@ -145,6 +148,18 @@ function handlePOST(req,res){
   // })
 }
 
+function sendList(res){
+
+  var namelist = readList();
+  res.writeHead(200, {
+    'Content-type': 'application/json'
+  })
+  res.write(
+    JSON.stringify(namelist)
+  )
+  res.end()
+}
+
 function readList(){
   var content = fs.readFileSync('top10.json');
   var namelist = JSON.parse(content);
@@ -154,8 +169,7 @@ function readList(){
     return b.score - a.score
   });
 
-  console.log(namelist[0].name);
-  console.log(namelist[0].score);
+  return namelist;
 }
 
 
