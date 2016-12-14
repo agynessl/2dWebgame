@@ -25,14 +25,6 @@ var playState = {
         this.addEmitter();
         this.addAnimations();
 
-<<<<<<< HEAD
-=======
-
-        this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
-        this.timer = game.time.events.loop(20000, this.addOneHealthPack, this);
-      	this.timer = game.time.events.loop(5000, this.changeEnemyMovingDirection,this);
-
->>>>>>> 8d7f0beb2c8fbd17a0112f3977514a885c705310
         this.createWorld();
         this.updateWorldEvent = game.time.now+this.updateWorldTime;
         this.AddHealthPackEvent = game.time.now+this.changeDirectionTime;
