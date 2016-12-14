@@ -396,6 +396,8 @@ var playState = {
     },
 
     gameOver: function(){
+    	this.happyBGM.stop();
+    	this.trippyBGM.stop();
         game.state.start('top10');
     },
 

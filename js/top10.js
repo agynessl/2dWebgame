@@ -5,7 +5,8 @@ var score = 403;
 
 var top10State = {
 	preload: function(){
-		console.log('In top10State')
+		console.log('In top10State');
+		game.load.image('top10table','assets/rank.png');
 	},
 
 	create: function(){
@@ -16,7 +17,8 @@ var top10State = {
 		this.generateList();
 		this.getList();
 
-		game.add.button(125,450,'backbutton',this.backToMenu,this,0,1,2);
+		game.add.image(75,50,'top10table');
+		game.add.button(125,500,'back2button',this.backToMenu,this,0,1,2);
 	},
 
 	generateList: function(){

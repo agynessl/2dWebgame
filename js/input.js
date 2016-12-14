@@ -3,6 +3,7 @@ var inputState = {
 
     preload: function() {
         console.log('in inputState');
+        game.load.spritesheet('nextbutton', 'assets/next.png', 150, 50);
     },
 
     create: function() {
@@ -13,7 +14,7 @@ var inputState = {
         this.scale.pageAlignVertically = true;
         this.nameInput = this.createInput(100, 60);
         //TODO: NEXT BUTTON
-        game.add.button(125,450,'playbutton',this.toMenu,this,0,1,2);
+        game.add.button(125,450,'nextbutton',this.toMenu,this,0,1,2);
     },
 
     createInput: function(x,y){
