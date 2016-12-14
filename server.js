@@ -39,6 +39,21 @@ function handleGET(path,res){
     case '/assets/play.png':
       sendFile(res, 'assets/play.png', 'image/png')
       break
+    case '/assets/particleWhite.png':
+      sendFile(res, 'assets/particleWhite.png', 'image/png')
+      break
+    case '/assets/particleRed.png':
+      sendFile(res, 'assets/particleRed.png', 'image/png')
+      break
+    case '/assets/star.png':
+      sendFile(res, 'assets/star.png', 'image/png')
+      break
+    case '/assets/heart.png':
+      sendFile(res, 'assets/heart.png', 'image/png')
+      break    
+    case '/assets/healthpack.png':
+      sendFile(res, 'assets/healthpack.png', 'image/png')
+      break
     case '/assets/back.png':
       sendFile(res, 'assets/back.png', 'image/png')
       break
