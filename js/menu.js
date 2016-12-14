@@ -5,6 +5,11 @@ var menuState = {
 	},
 
     create: function(){
+    	this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.maxWidth = this.game.width*scaler;
+        this.scale.maxHeight = this.game.height*scaler;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
     	game.add.button(125,150,'playbutton',this.inputname,this,0,1,2);
     	game.add.button(125,350,'aboutbutton',this.displayabout,this,0,1,2);
     },

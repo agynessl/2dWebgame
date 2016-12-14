@@ -139,7 +139,10 @@ var playState = {
     	}
     	if(this.nextModeEvent<game.time.now){
     		this.nextModeEvent+=this.nextModeTime;
-    		if(this.mode<3) this.mode+=1;
+    		if(this.mode<3){
+    			this.mode+=1;
+    			this.score+=2*this.mode;
+    		}
     	}
 
     	if(this.mode<=1){
@@ -411,6 +414,10 @@ var playState = {
     gameOver: function(){
       thescore = this.score;
       this.StateText.text = ' GAME OVER \n Click to view ranking';
+      this.stones.addChild(this.StateText);
+      this.coins.addChild(this.StateText);
+      this.enemies.addChild(this.StateText);
+      this.healthpacks.addChild(this.StateText);
       this.StateText.visible = true;
       game.input.onTap.addOnce(this.goToRanking,this);
 

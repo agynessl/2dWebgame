@@ -6,11 +6,6 @@ var inputState = {
     },
 
     create: function() {
-        //a this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        // this.scale.maxWidth = this.game.width*scaler;
-        // this.scale.maxHeight = this.game.height*scaler;
-        // this.scale.pageAlignHorizontally = true;
-        // this.scale.pageAlignVertically = true;
         this.nameInput = this.createInput(100, 60);
         game.add.button(125,450,'nextbutton',this.toMenu,this,0,1,2);
     },
