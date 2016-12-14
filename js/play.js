@@ -25,6 +25,14 @@ var playState = {
         this.addEmitter();
         this.addAnimations();
 
+<<<<<<< HEAD
+=======
+
+        this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
+        this.timer = game.time.events.loop(20000, this.addOneHealthPack, this);
+      	this.timer = game.time.events.loop(5000, this.changeEnemyMovingDirection,this);
+
+>>>>>>> 8d7f0beb2c8fbd17a0112f3977514a885c705310
         this.createWorld();
         this.updateWorldEvent = game.time.now+this.updateWorldTime;
         this.AddHealthPackEvent = game.time.now+this.changeDirectionTime;
@@ -267,7 +275,7 @@ var playState = {
     	healthpack.kill();
     	if(this.live<5){
     		this.live += 1;
-    		this.liveLabel.text = 'x '+this.live;	
+    		this.liveLabel.text = 'x '+this.live;
     	}
     	else{
     		this.score += 2;
@@ -291,8 +299,8 @@ var playState = {
     	else if(enemy.body.touching.down){
 	        enemy.body.velocity.x = 0;
     		enemy.body.velocity.y = this.grav - this.enemymovingspeed;
-    	}    		
-    	
+    	}
+
     },
 
     changeEnemyMovingDirection: function(){
@@ -364,7 +372,7 @@ var playState = {
     },
 
     gameOver: function(){
-        game.state.start('menu');
+        game.state.start('top10');
     },
 
 };
@@ -401,3 +409,4 @@ var initialMap = [
     "x                  x",
     "x                  x",
     "x                  x",];
+

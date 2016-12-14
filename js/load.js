@@ -19,12 +19,12 @@ var loadState = {
         game.load.image('heart', 'assets/heart.png');
         game.load.image('blood', 'assets/particleRed.png');
         game.load.image('white', 'assets/particleWhite.png');
-        
+
         game.load.audio('coinsound','assets/coin.mp3');
         game.load.audio('hitsound','assets/hit.mps');
     },
 
     create: function() {
-        game.state.start('menu');
+        game.state.start('input');
     }
 };

@@ -16,6 +16,7 @@ var top10State = {
 		this.generateList();
 		this.getList();
 
+		game.add.button(125,450,'backbutton',this.backToMenu,this,0,1,2);
 	},
 
 	generateList: function(){
@@ -60,6 +61,10 @@ var top10State = {
 
 	  req.open("POST", "/scorecheck", true);
 	  req.send('name='+name+ '&score=' + score);
+	},
+
+	backToMenu: function(){
+		game.state.start('menu');
 	}
 
 };
