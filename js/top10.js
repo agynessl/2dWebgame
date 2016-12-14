@@ -1,67 +1,65 @@
 //display the result
 //update the top 10 list
+var name = 'tempUser';
+var score = 403;
+
 var top10State = {
 	preload: function(){
 		console.log('In top10State')
 	},
 
 	create: function(){
-		//this.nameLabel = game.add.text(30, 5, 'Name1',
-		//{ font: '18px Arial', fill: '#826484' });
+
+		this.names = game.add.group();
+		this.scores = game.add.group();
+		//this.sendResult();
+		this.generateList();
 		this.getList();
+
+	},
+
+	generateList: function(){
+		var i = 1;
+
+		for(i =1; i < 11; i+=1){
+			var nameLabel = game.add.text(30, 5 + 30 * (i-1), 'name' + i,
+			{ font: '18px Arial', fill: '#826484' });
+			var scoreLabel = game.add.text(120, 5 + 30 * (i-1), 'score' + i,
+			{ font: '18px Arial', fill: '#826484' });
+
+			this.names.add(nameLabel);
+			this.scores.add(scoreLabel);
+		}
 	},
 
 	getList: function(){
 		var req = new XMLHttpRequest();
 
 		req.addEventListener("load", function() {
-	    buildList( JSON.parse(this.responseText));
+	    game.state.states['top10'].buildList( JSON.parse(this.responseText));
 	  });
 
 		req.open('GET', '/top10list');
 		req.send();
 	},
 
+	buildList: function(list){
+		var i = 0;
+		for(i =0; i< 10; i+= 1){
+			this.names.getChildAt(i).text = list[i].name;
+			this.scores.getChildAt(i).text = list[i].score;
+		}
+	},
+
+	sendResult: function(){
+		var req = new XMLHttpRequest();
+
+	  req.addEventListener("load", function() {
+	    game.state.states['top10'].getList()
+	  });
+
+	  req.open("POST", "/scorecheck", true);
+	  req.send('name='+name+ '&score=' + score);
+	}
+
 };
-
-function getList(){
-	var req = new XMLHttpRequest();
-
-	req.addEventListener("load", function() {
-    buildList( JSON.parse(this.responseText))
-  });
-
-	req.open('GET', '/top10list');
-	req.send();
-};
-
-function buildList(list){
-	game.nameLabel1 = game.add.text(30, 5, list[0].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.scoreLabel1 = game.add.text(90, 5, list[0].score,
-	{ font: '18px Arial', fill: '#826484' });
-
-	game.nameLabel2 = game.add.text(30, 30, list[1].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.nameLabel3 = game.add.text(30, 55, list[2].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.nameLabel4 = game.add.text(30, 80, list[3].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.nameLabel5 = game.add.text(30, 105, list[4].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.nameLabel6 = game.add.text(30, 130, list[5].name,
-	{ font: '18px Arial', fill: '#826484' });
-	game.nameLabel7 = game.add.text(30, 155, list[6].name,
-	{ font: '18px Arial', fill: '#826484' });
-};
-
-function sendResult(){
-	var req = new XMLHttpRequest();
-
-  req.addEventListener("load", function() {
-    getList()
-  });
-
-  req.open("POST", "/add", true);
-  req.send('newclass='+div.value);
-}
