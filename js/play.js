@@ -75,6 +75,16 @@ var playState = {
     },
 
     addEmitter: function(){
+    	this.traileffect = game.add.emitter(0,0,Math.MAX_SAFE_INTEGER);
+    	this.traileffect.makeParticles('white');
+    	this.traileffect.setYSpeed(0,10);
+        this.traileffect.setAlpha(1, 0.5, 800);
+        this.traileffect.setScale(2, 1, 2, 1, 800);
+        this.traileffect.start(false, 1200, 200, Math.MAX_SAFE_INTEGER);
+    	this.traileffect.grav=this.grav;
+    	this.player.addChild(this.traileffect);
+    	this.traileffect.position.x =10;
+		this.traileffect.position.y =20;    
     	this.bloodyeffect = game.add.emitter(0, 0, 15);
     	this.bloodyeffect.makeParticles('blood');
 		this.bloodyeffect.setYSpeed(-150, 150);
@@ -137,23 +147,31 @@ var playState = {
 
     movePlayer: function() {
         if (this.cursor.left.isDown) {
+        	this.traileffect.setXSpeed(100,200);
+        	this.traileffect.setYSpeed(0,10);
             this.player.body.velocity.x = -200;
             this.player.body.velocity.y = this.grav;
             this.player.animations.play('left');
         }
         // If the right arrow key is pressed
         else if (this.cursor.right.isDown) {
+        	this.traileffect.setXSpeed(-100,-200);
+        	this.traileffect.setYSpeed(0,10);
             this.player.body.velocity.x = 200;
             this.player.body.velocity.y = this.grav;
             this.player.animations.play('right');
         }
         // If the up arrow key is pressed and the player is on the ground
         else if (this.cursor.up.isDown) {
+        	this.traileffect.setXSpeed(-50,50);
+        	this.traileffect.setYSpeed(0,10);
             this.player.body.velocity.x = 0;
             this.player.body.velocity.y = -200 + this.grav;
             this.player.animations.play('updown');
         }
         else if(this.cursor.down.isDown){
+        	this.traileffect.setXSpeed(-50,50);
+        	this.traileffect.setYSpeed(-200,-100);
             this.player.body.velocity.x = 0;
             this.player.body.velocity.y = 200 + this.grav;
             this.player.animations.play('updown');
@@ -161,6 +179,8 @@ var playState = {
         // If none of the key is pressed
         else {
             // Stop the player
+        	this.traileffect.setXSpeed(-50,50);
+        	this.traileffect.setYSpeed(0,10);
             this.player.body.velocity.x = 0;
             this.player.body.velocity.y= this.grav;
             this.player.animations.stop();
@@ -274,6 +294,8 @@ var playState = {
 
     takehealthpack: function(player,healthpack){
     	healthpack.kill();
+    	game.add.tween(player.scale).to({x: 1.3, y: 1.3}, 300)
+.yoyo(true).start();
      	this.healthsound.play();
     	if(this.live<5){
     		this.live += 1;
