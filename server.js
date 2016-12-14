@@ -90,6 +90,9 @@ function handleGET(path,res){
     case '/phaser.min.js':
       sendFile(res, 'phaser.min.js', 'text/javascript')
       break
+    case '/CanvasInput.min.js':
+      sendFile(res, 'CanvasInput.min.js', 'text/javascript')
+      break
     case '/js/boot.js':
       sendFile(res, 'js/boot.js', 'text/javascript')
       break
