@@ -29,7 +29,7 @@ var playState = {
 
         
         this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
-
+        this.timer = game.time.events.loop(20000, this.addOneHealthPack, this);
         this.createWorld();
     },
 
@@ -39,7 +39,8 @@ var playState = {
         this.lineindex = 9;
         this.scoreLabel = game.add.text(10, 0, 'score: 0',
         { font: '18px Arial', fill: '#826484' });
-        this.liveLabel = game.add.text(10, 15, 'lives: 3',
+        this.heartImage = game.add.image(340,0,'heart');
+        this.liveLabel = game.add.text(365, 0, 'x '+this.live,
         { font: '18px Arial', fill: '#826484' });
         this.currentmap = initialMap;
                 //add key
@@ -56,8 +57,8 @@ var playState = {
         this.stones = game.add.group();
         this.coins = game.add.group();
         this.enemies = game.add.group();
-        this.healthpack = game.add.group();
-        this.star = game.add.group();
+        this.healthpacks = game.add.group();
+        this.stars = game.add.group();
     },
 
     addEmitter: function(){
@@ -82,7 +83,10 @@ var playState = {
         game.physics.arcade.collide(this.player, this.stones);
         game.physics.arcade.collide(this.player, this.enemies, this.takelife, null, this);
         game.physics.arcade.overlap(this.player,this.coins, this.takecoin, null, this);
-
+        game.physics.arcade.overlap(this.player,this.healthpacks,this.takehealthpack,null,this);
+        game.physics.arcade.overlap(this.healthpacks,this.stones,this.killObject,null,this);
+        game.physics.arcade.overlap(this.healthpacks,this.enemies,this.killObject,null,this);
+        game.physics.arcade.overlap(this.healthpacks,this.coins,this.killObject,null,this);
         this.coins.forEach(function(coin){
           coin.animations.play('normal');
         });
@@ -119,6 +123,20 @@ var playState = {
             this.player.body.velocity.y= this.grav;
             this.player.animations.stop();
         }
+    },
+
+    addOneHealthPack: function(){
+    	var x = game.rnd.integerInRange(1,18);
+    	var hp = game.add.sprite(x*20, 20, 'healthpack');
+    	this.healthpacks.add(hp);
+    	game.physics.arcade.enable(hp);
+    	this.addGravity(hp);
+    	hp.checkWorldBounds = true;
+        hp.outOfBoundsKill = true;
+    },
+
+    addOneStar: function(){
+
     },
 
     addOneEnemy: function(x,y) {
@@ -176,19 +194,36 @@ var playState = {
         this.scoreLabel.text = 'score: ' + this.score;
     },
 
+    killObject: function(dominant,killed){
+    	killed.kill();
+    },
+
     takelife: function(player, enemy){
      	enemy.kill();
      	this.bloodyeffect.x = player.x;
      	this.bloodyeffect.y = player.y;
+     	game.camera.shake(0.02, 300);
 		this.bloodyeffect.start(true, 800, null, 15);
 		this.hitsound.play();
 		this.live -= 1;
-		this.liveLabel.text = 'lives: ' + this.live;
+		this.liveLabel.text = 'x ' + this.live;
 
 
       if(this.live < 1){
         this.gameOver();
       }
+    },
+
+    takehealthpack: function(player,healthpack){
+    	healthpack.kill();
+    	if(this.live<5){
+    		this.live += 1;
+    		this.liveLabel.text = 'x '+this.live;	
+    	}
+    	else{
+    		this.score += 2;
+    		this.scoreLabel.text = 'score: '+this.score;
+    	}
     },
 
     createWorld: function(){
