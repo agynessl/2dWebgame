@@ -50,7 +50,7 @@ function handleGET(path,res){
       break
     case '/assets/heart.png':
       sendFile(res, 'assets/heart.png', 'image/png')
-      break    
+      break
     case '/assets/healthpack.png':
       sendFile(res, 'assets/healthpack.png', 'image/png')
       break
@@ -132,20 +132,42 @@ function handleGET(path,res){
 }
 
 function handlePOST(req,res){
-  // var body = ''
+   var body = ''
 
-  // req.on('data', function(d) {
-  //   body += d;
-  // })
+   req.on('data', function(d) {
+     body += d;
+  })
 
-  // req.on('end', function(d) {
-  //   console.log(body)
-  //   var post = qs.parse(body)
+  req.on('end', function(d) {
+    console.log(body)
+    var post = qs.parse(body)
 
-  //   if(post.username){
-  //     console.log('hi')
-  //   }
-  // })
+    if(post.name && post.score){
+      var object = new Object();
+      object.name = post.name;
+      object.score = post.score;
+      updateList(object)
+      res.end()
+    }
+    else{
+      res.end('Nothing sent')
+    }
+
+  })
+}
+
+function updateList(object){
+  //get the list and push to list
+  var namelist = readList()
+  namelist.push(object);
+  //sort the list
+  namelist.sort(function(a,b){
+    return b.score - a.score
+  });
+  //cut the list
+  namelist.slice(0,9)
+  //write to file
+  fs.writeFileSync('top10.json',JSON.stringify(namelist))
 }
 
 function sendList(res){
