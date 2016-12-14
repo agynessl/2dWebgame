@@ -6,7 +6,10 @@ var inputState = {
     },
 
     create: function() {
-        this.nameInput = this.createInput(100, 60);
+        this.textlabel = game.add.text(200,170, 'Enter your name please:',
+  			{ font: '20px Arial', fill: '#826484'});
+        this.textlabel.anchor.setTo(0.5,0.5);
+        this.nameInput = this.createInput(90, 200);
         game.add.button(125,450,'nextbutton',this.toMenu,this,0,1,2);
     },
 
