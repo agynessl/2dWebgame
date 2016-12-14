@@ -1,4 +1,3 @@
-var thename;
 var inputState = {
 
     preload: function() {
@@ -7,13 +6,12 @@ var inputState = {
     },
 
     create: function() {
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.maxWidth = this.game.width*scaler;
-        this.scale.maxHeight = this.game.height*scaler;
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
+        //a this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        // this.scale.maxWidth = this.game.width*scaler;
+        // this.scale.maxHeight = this.game.height*scaler;
+        // this.scale.pageAlignHorizontally = true;
+        // this.scale.pageAlignVertically = true;
         this.nameInput = this.createInput(100, 60);
-        //TODO: NEXT BUTTON
         game.add.button(125,450,'nextbutton',this.toMenu,this,0,1,2);
     },
 
@@ -50,7 +48,7 @@ var inputState = {
     toMenu: function(){
       thename = this.nameInput.canvasInput.value();
       console.log(thename);
-    	game.state.start('menu');
+    	game.state.start('play');
     }
 
 

@@ -1,4 +1,5 @@
 var direction = ['d','a','s','w'];
+var thescore = 0;
 //add out of bound check
 //add enemy count
 
@@ -31,7 +32,7 @@ var playState = {
         this.AddHealthPackEvent = game.time.now+this.changeDirectionTime;
         this.changeDirectionEvent = game.time.now+this.healthRespawnTime;
         this.nextModeEvent = game.time.now+this.nextModeTime;
-        
+
     },
 
     initializeGadgets: function(){
@@ -56,6 +57,11 @@ var playState = {
         { font: '18px Arial', fill: '#826484' });
         this.timeLabel = game.add.text(175, 0, 'Time:'+0,
         { font: '18px Arial', fill: '#826484' });
+        this.StateText = game.add.text(game.world.centerX, game.world.centerY, ' ',
+        { font: '32px Arial', fill: '#826484'});
+        this.StateText.anchor.setTo(0.5,0.5);
+        this.StateText.visible = false;
+
                 //add key
         this.cursor = game.input.keyboard.createCursorKeys();
     },
@@ -84,7 +90,7 @@ var playState = {
     	this.traileffect.grav=this.grav;
     	this.player.addChild(this.traileffect);
     	this.traileffect.position.x =10;
-		this.traileffect.position.y =20;    
+		this.traileffect.position.y =20;
     	this.bloodyeffect = game.add.emitter(0, 0, 15);
     	this.bloodyeffect.makeParticles('blood');
 		this.bloodyeffect.setYSpeed(-150, 150);
@@ -136,13 +142,13 @@ var playState = {
     		if(this.mode<3) this.mode+=1;
     	}
     	if(this.mode>0){
-    		game.physics.arcade.overlap(this.enemies,this.coins,this.enemyEatCoin,null,this);	
+    		game.physics.arcade.overlap(this.enemies,this.coins,this.enemyEatCoin,null,this);
     	}
     	if(this.switchMusicEvent<game.time.now){
     		this.happyBGM.stop();
     		this.trippyBGM.play();
     		this.switchMusicEvent=Number.MAX_SAFE_INTEGER;
-    	}	
+    	}
     },
 
     movePlayer: function() {
@@ -364,7 +370,7 @@ var playState = {
 	            }
 	            else if(char=='!'){
 	                this.addOneEnemy(20*x,20*y);
-	            }        		
+	            }
         	}
         }
         this.currentmap=mapset[this.mode][game.rnd.integerInRange(0,this.easymap)]
@@ -390,16 +396,26 @@ var playState = {
 
         this.lineindex-=1;
         if(this.lineindex<0){
-       		this.currentmap=mapset[this.mode][game.rnd.integerInRange(0,this.easymap)];         
+       		this.currentmap=mapset[this.mode][game.rnd.integerInRange(0,this.easymap)];
             this.lineindex=9;
         }
     },
 
     gameOver: function(){
+      thescore = this.score;
+      this.StateText.text = ' GAME OVER \n Click to view ranking';
+      this.StateText.visible = true;
+      game.input.onTap.addOnce(this.goToRanking,this);
+
+      this.player.kill();
     	this.happyBGM.stop();
     	this.trippyBGM.stop();
-        game.state.start('top10');
+        //game.state.start('top10');
     },
+
+    goToRanking: function(){
+      game.state.start('top10');
+    }
 
 };
 
@@ -435,4 +451,3 @@ var initialMap = [
     "x                  x",
     "x                  x",
     "x                  x",];
-

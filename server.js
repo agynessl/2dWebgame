@@ -23,18 +23,6 @@ readList();
 
 // subroutines
 function handleGET(path,res){
-    //TODO:an automatic sending file server!
-    // if(path=='/'){
-    //   sendFile(res, 'index.html')
-    // }
-    // else if(ch1=='m' & ch2=='d'){
-    //   sendFile(RES, path, 'text/markdown')
-    // }
-    // else{
-    //   res.end('404 not found')
-    // }
-
-
     switch(path) {
     case '/assets/play.png':
       sendFile(res, 'assets/play.png', 'image/png')
@@ -169,7 +157,7 @@ function handlePOST(req,res){
     if(post.name && post.score){
       var object = new Object();
       object.name = post.name;
-      object.score = post.score;
+      object.score = parseInt(post.score);
       updateList(object)
       res.end()
     }
@@ -189,9 +177,9 @@ function updateList(object){
     return b.score - a.score
   });
   //cut the list
-  namelist.slice(0,9)
+  var newlist = namelist.slice(0,10)
   //write to file
-  fs.writeFileSync('top10.json',JSON.stringify(namelist))
+  fs.writeFileSync('top10.json',JSON.stringify(newlist))
 }
 
 function sendList(res){

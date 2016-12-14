@@ -1,7 +1,5 @@
 //display the result
 //update the top 10 list
-var name = 'tempUser';
-var score = 403;
 var top10State = {
 	preload: function(){
 		console.log('In top10State');
@@ -13,11 +11,15 @@ var top10State = {
 		this.top10table = game.add.sprite(75,50,'top10table');
 		this.names = game.add.group();
 		this.scores = game.add.group();
-		//this.sendResult();
+		this.sendResult();
 		this.generateList();
 		this.getList();
 
-		game.add.button(125,500,'back2button',this.backToMenu,this,0,1,2);
+		var playbutton = game.add.button(62,500,'playbutton',this.backToPlay,this,0,1,2);
+		playbutton.scale.setTo(0.5,0.5);
+
+		var backbutton = game.add.button(262,500,'backbutton',this.backToMenu,this,0,1,2);
+		backbutton.scale.setTo(0.5,0.5);
 	},
 
 	generateList: function(){
@@ -61,11 +63,15 @@ var top10State = {
 	  });
 
 	  req.open("POST", "/scorecheck", true);
-	  req.send('name='+name+ '&score=' + score);
+	  req.send('name='+thename+ '&score=' + thescore);
 	},
 
 	backToMenu: function(){
 		game.state.start('menu');
+	},
+
+	backToPlay: function(){
+		game.state.start('play');
 	}
 
 };

@@ -9,6 +9,10 @@ var loadState = {
         game.load.spritesheet('playbutton', 'assets/play.png', 150, 100);
       	game.load.spritesheet('backbutton', 'assets/back.png', 150, 100);
       	game.load.spritesheet('aboutbutton', 'assets/about.png', 150, 100);
+        game.load.spritesheet('playbutton', 'assets/play.png', 150, 100);
+      	game.load.spritesheet('backbutton', 'assets/back.png', 150, 100);
+      	game.load.spritesheet('back2button', 'assets/back2.png', 150, 50);
+
         game.load.spritesheet('player','assets/character.png', 20, 20);
         game.load.spritesheet('coin','assets/coin.png',20,20);
         game.load.image('stone','assets/stone.png',20,20);
@@ -24,11 +28,11 @@ var loadState = {
         game.load.audio('healthsound','assets/health.wav');
         game.load.audio('coinsound','assets/coin.mp3');
         game.load.audio('eatsound','assets/eat.wav');
-        game.load.audio('happyBGM','assets/happyBGM.wav'); 
+        game.load.audio('happyBGM','assets/happyBGM.wav');
         game.load.audio('trippyBGM','assets/trippyBGM.wav');
     },
 
     create: function() {
-        game.state.start('input');
+        game.state.start('menu');
     }
 };
