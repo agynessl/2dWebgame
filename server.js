@@ -75,8 +75,20 @@ function handleGET(path,res){
     case '/assets/coin.mp3':
       sendFile(res, 'assets/coin.mp3', 'audio/mp3')
       break
-    case '/assets/hit.mp3':
-      sendFile(res, 'assets/hit.mp3', 'audio/mp3')
+    case '/assets/eat.wav':
+      sendFile(res, 'assets/eat.wav', 'audio/wav')
+      break
+    case '/assets/health.wav':
+      sendFile(res, 'assets/health.wav', 'audio/wav')
+      break
+    case '/assets/pain.wav':
+      sendFile(res, 'assets/pain.wav', 'audio/wav')
+      break
+    case '/assets/happyBGM.wav':
+      sendFile(res, 'assets/happyBGM.wav', 'audio/wav')
+      break
+    case '/assets/trippyBGM.wav':
+      sendFile(res, 'assets/trippy.wav', 'audio/wav')
       break
     case '/':
       sendFile(res, 'index.html')

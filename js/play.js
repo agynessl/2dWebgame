@@ -9,16 +9,16 @@ var playState = {
 
 
     create: function() {
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.maxWidth = this.game.width;
-        this.scale.maxHeight = this.game.height;
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
-
-
+    	this.healthsound = game.add.audio('healthsound');
+    	this.painsound = game.add.audio('painsound');
+    	this.eatsound = game.add.audio('eatsound');
         this.coinsound = game.add.audio('coinsound');
-        this.hitsound = game.add.audio('hitsound');
-        //this.scale.setScreenSize( true );
+        this.trippyBGM = game.add.audio('trippyBGM');
+        this.trippyBGM.loop = true;
+        this.happyBGM = game.add.audio('happyBGM');
+        this.happyBGM.loop = true; // Make it loop
+		this.happyBGM.play();
+
 
         this.initializeGadgets();
         this.initializeEntities();
@@ -26,6 +26,7 @@ var playState = {
         this.addAnimations();
 
         this.createWorld();
+        this.switchMusicEvent = game.time.now+this.nextModeTime*2;
         this.updateWorldEvent = game.time.now+this.updateWorldTime;
         this.AddHealthPackEvent = game.time.now+this.changeDirectionTime;
         this.changeDirectionEvent = game.time.now+this.healthRespawnTime;
@@ -125,9 +126,13 @@ var playState = {
     		if(this.mode<3) this.mode+=1;
     	}
     	if(this.mode>0){
-    		game.physics.arcade.overlap(this.enemies,this.coins,this.killObject,null,this);	
+    		game.physics.arcade.overlap(this.enemies,this.coins,this.enemyEatCoin,null,this);	
     	}
-    		
+    	if(this.switchMusicEvent<game.time.now){
+    		this.happyBGM.stop();
+    		this.trippyBGM.play();
+    		this.switchMusicEvent=Number.MAX_SAFE_INTEGER;
+    	}	
     },
 
     movePlayer: function() {
@@ -236,11 +241,15 @@ var playState = {
     },
 
     takecoin: function(player,coin){
-        console.log('takeCoin')
         coin.kill();
         this.coinsound.play();
         this.score += 1;
         this.scoreLabel.text = 'score: ' + this.score;
+    },
+
+    enemyEatCoin: function(enemy,coin){
+    	coin.kill();
+    	this.eatsound.play();
     },
 
     killObject: function(dominant,killed){
@@ -249,11 +258,11 @@ var playState = {
 
     takelife: function(player, enemy){
      	enemy.kill();
+     	this.painsound.play();
      	this.bloodyeffect.x = player.x;
      	this.bloodyeffect.y = player.y;
      	game.camera.shake(0.02, 300);
 		this.bloodyeffect.start(true, 800, null, 15);
-		this.hitsound.play();
 		this.live -= 1;
 		this.liveLabel.text = 'x ' + this.live;
 
@@ -265,6 +274,7 @@ var playState = {
 
     takehealthpack: function(player,healthpack){
     	healthpack.kill();
+     	this.healthsound.play();
     	if(this.live<5){
     		this.live += 1;
     		this.liveLabel.text = 'x '+this.live;

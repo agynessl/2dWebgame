@@ -20,8 +20,12 @@ var loadState = {
         game.load.image('blood', 'assets/particleRed.png');
         game.load.image('white', 'assets/particleWhite.png');
 
+        game.load.audio('painsound','assets/pain.wav');
+        game.load.audio('healthsound','assets/health.wav');
         game.load.audio('coinsound','assets/coin.mp3');
-        game.load.audio('hitsound','assets/hit.mps');
+        game.load.audio('eatsound','assets/eat.wav');
+        game.load.audio('happyBGM','assets/happyBGM.wav'); 
+        game.load.audio('trippyBGM','assets/trippyBGM.wav');
     },
 
     create: function() {

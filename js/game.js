@@ -1,7 +1,7 @@
 
 var game = new Phaser.Game(400, 620, Phaser.CANVAS, 'gamediv');
 
-
+var scaler = 1.4;
 
 game.state.add('boot', bootState);
 game.state.add('menu',menuState);

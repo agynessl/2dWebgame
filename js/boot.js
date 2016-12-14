@@ -8,6 +8,8 @@ var bootState = {
         }
 
         // Put the game on the middle of the screen
+        game.scale.maxWidth = this.game.width*scaler;
+        game.scale.maxHeight = this.game.height*scaler;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
