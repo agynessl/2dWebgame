@@ -1,6 +1,5 @@
-var change = 0;
 var maxmap=9;
-
+var direction = ['d','a','s','w'];
 //add out of bound check
 //add enemy count
 
@@ -18,6 +17,7 @@ var playState = {
         this.scale.pageAlignVertically = true;
 
         this.grav = 40;
+        this.enemymovingspeed = 100;
         this.coinsound = game.add.audio('coinsound');
         this.hitsound = game.add.audio('hitsound');
         //this.scale.setScreenSize( true );
@@ -30,6 +30,8 @@ var playState = {
         
         this.timer = game.time.events.loop(20000/this.grav, this.updateWorld, this);
         this.timer = game.time.events.loop(20000, this.addOneHealthPack, this);
+      	this.timer = game.time.events.loop(5000, this.changeEnemyMovingDirection,this);
+        
         this.createWorld();
     },
 
@@ -81,13 +83,14 @@ var playState = {
 
         this.world.setBounds( 0, 0, 400, 620);
         game.physics.arcade.collide(this.player, this.stones);
+        game.physics.arcade.collide(this.stones, this.enemies, this.changeDirectionWhenCollideWall, null, this);
         game.physics.arcade.collide(this.player, this.enemies, this.takelife, null, this);
         game.physics.arcade.overlap(this.player,this.coins, this.takecoin, null, this);
         game.physics.arcade.overlap(this.player,this.healthpacks,this.takehealthpack,null,this);
         game.physics.arcade.overlap(this.healthpacks,this.stones,this.killObject,null,this);
         game.physics.arcade.overlap(this.healthpacks,this.enemies,this.killObject,null,this);
         game.physics.arcade.overlap(this.healthpacks,this.coins,this.killObject,null,this);
-        this.coins.forEach(function(coin){
+        this.coins.forEachAlive(function(coin){
           coin.animations.play('normal');
         });
 
@@ -140,9 +143,9 @@ var playState = {
     },
 
     addOneEnemy: function(x,y) {
+
         // Create a coin at the position x and y
         var anenemy = game.add.sprite(x, y, 'enemy');
-
         // Add the coin to our previously created group
         this.enemies.add(anenemy);
 
@@ -152,6 +155,18 @@ var playState = {
         anenemy.body.immovable = true;
         anenemy.checkWorldBounds = true;
         anenemy.outOfBoundsKill = true;
+        var dir = direction[game.rnd.integerInRange(0,2)];
+        switch(dir){
+        	case 's':
+        		anenemy.body.velocity.y = this.grav + this.enemymovingspeed;
+        		break;
+        	case 'a':
+        		anenemy.body.velocity.x = -this.enemymovingspeed;
+        		break;
+        	case 'd':
+        		anenemy.body.velocity.x = this.enemymovingspeed;
+        		break;
+        }
     },
 
     addOneCoin: function(x,y){
@@ -173,8 +188,8 @@ var playState = {
 
     addOneStone: function(x,y){
         // Create a coin at the position x and y
-        var astone = game.add.sprite(x, y, 'stone');
 
+        var astone = game.add.sprite(x, y, 'stone');
         // Add the coin to our previously created group
         this.stones.add(astone);
 
@@ -224,6 +239,51 @@ var playState = {
     		this.score += 2;
     		this.scoreLabel.text = 'score: '+this.score;
     	}
+    },
+
+    changeDirectionWhenCollideWall: function(stone,enemy){
+    	if(enemy.body.touching.left){
+	        enemy.body.velocity.y = this.grav;
+    		enemy.body.velocity.x = this.enemymovingspeed;
+    	}
+    	else if(enemy.body.touching.right){
+	        enemy.body.velocity.y = this.grav;
+    		enemy.body.velocity.x = -this.enemymovingspeed;
+    	}
+    	else if(enemy.body.touching.up){
+	        enemy.body.velocity.x = 0;
+    		enemy.body.velocity.y = this.grav + this.enemymovingspeed;
+    	}
+    	else if(enemy.body.touching.down){
+	        enemy.body.velocity.x = 0;
+    		enemy.body.velocity.y = this.grav - this.enemymovingspeed;
+    	}    		
+    	
+    },
+
+    changeEnemyMovingDirection: function(){
+    	var grav = this.grav;
+    	var speed = this.enemymovingspeed;
+    	this.enemies.forEachAlive(function(anenemy){
+    		var dir = direction[game.rnd.integerInRange(0,3)];
+    		switch(dir){
+	        	case 'w':
+	        		anenemy.body.velocity.x = 0;
+	        		anenemy.body.velocity.y = grav + speed;
+	        		break;
+	        	case 's':
+	        		anenemy.body.velocity.x = 0;
+	        		anenemy.body.velocity.y = grav - speed;
+	        		break;
+	        	case 'a':
+	        		anenemy.body.velocity.y = grav;
+	        		anenemy.body.velocity.x = -speed;
+	        		break;	        	case 'd':
+	        		anenemy.body.velocity.y = grav;
+	        		anenemy.body.velocity.x = speed;
+	        		break;
+	        }
+    	})
     },
 
     createWorld: function(){
