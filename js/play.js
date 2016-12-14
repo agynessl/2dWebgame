@@ -43,7 +43,7 @@ var playState = {
         this.live = 3;
         this.lineindex = 9;
         this.grav = 40;
-        this.enemymovingspeed = 100;
+        this.enemymovingspeed = 50;
         this.healthRespawnTime = 20000;
         this.updateWorldTime = 20000/this.grav;
         this.changeDirectionTime = 3000;
@@ -110,12 +110,12 @@ var playState = {
         this.movePlayer();
         this.world.setBounds( 0, 0, 400, 620);
         game.physics.arcade.collide(this.player, this.stones);
+        game.physics.arcade.collide(this.healthpacks, this.enemies, this.changeDirectionWhenCollideWall, null, this);
         game.physics.arcade.collide(this.stones, this.enemies, this.changeDirectionWhenCollideWall, null, this);
         game.physics.arcade.collide(this.player, this.enemies, this.takelife, null, this);
         game.physics.arcade.overlap(this.player,this.coins, this.takecoin, null, this);
         game.physics.arcade.overlap(this.player,this.healthpacks,this.takehealthpack,null,this);
         game.physics.arcade.overlap(this.healthpacks,this.stones,this.killObject,null,this);
-        game.physics.arcade.overlap(this.healthpacks,this.enemies,this.killObject,null,this);
         game.physics.arcade.overlap(this.healthpacks,this.coins,this.killObject,null,this);
         this.coins.forEachAlive(function(coin){
           coin.animations.play('normal');
@@ -141,10 +141,16 @@ var playState = {
     		this.nextModeEvent+=this.nextModeTime;
     		if(this.mode<3) this.mode+=1;
     	}
-    	if(this.mode>0){
+
+    	if(this.mode<=1){
+    		game.physics.arcade.collide(this.coins,this.enemies,this.changeDirectionWhenCollideWall,null,this);
+    	}
+    	if(this.mode>1){
     		game.physics.arcade.overlap(this.enemies,this.coins,this.enemyEatCoin,null,this);
     	}
+      
     	if(this.switchMusicEvent<game.time.now){
+    		this.enemymovingspeed=100;
     		this.happyBGM.stop();
     		this.trippyBGM.play();
     		this.switchMusicEvent=Number.MAX_SAFE_INTEGER;
@@ -199,6 +205,7 @@ var playState = {
     	this.healthpacks.add(hp);
     	game.physics.arcade.enable(hp);
     	this.addGravity(hp);
+    	hp.body.immovable = true;
     	hp.checkWorldBounds = true;
         hp.outOfBoundsKill = true;
     },
@@ -246,7 +253,7 @@ var playState = {
         game.physics.arcade.enable(acoin);
         acoin.animations.add('normal', [0, 2], 4, true);
         this.addGravity(acoin);
-
+        acoin.body.immovable = true;
         acoin.checkWorldBounds = true;
         acoin.outOfBoundsKill = true;
     },
