@@ -9,7 +9,9 @@ Fonts End:
 The whole game sits on the front end.
 
 Back End:
-The username is stored in the server and server returns the top 10 scores along with the usernames to a player when the player finishes the game.
+The username and scores are stored in the server.
+At the end of each game, a request with user name and score will be send to server, server will update the top 10 score list.
+Then a request with get list will update the top 10 list.
 
 Tools:
 Node.js
