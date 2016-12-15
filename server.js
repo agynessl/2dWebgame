@@ -132,7 +132,7 @@ function handleGET(path,res){
     case '/js/main.js':
       sendFile(res, 'js/main.js', 'text/javascript')
       break
-    case '/js/README.md':
+    case '/README.md':
       sendFile(res, 'README.md', 'text/markdown')
       break
     case '/top10list':

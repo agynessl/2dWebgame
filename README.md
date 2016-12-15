@@ -3,7 +3,7 @@ CS4241 Webware final project
 
 Teammates:
 Qiaoyu Liao
-Jinan
+Jinan Hu
 
 Fonts End:
 The whole game sits on the front end.
