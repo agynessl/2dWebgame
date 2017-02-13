@@ -1,7 +1,7 @@
-# CS4241FP
+# Hide and dodge 2D web game
 CS4241 Webware final project
 
-Teammates:
+Developers:
 Qiaoyu Liao
 Jinan Hu
 
