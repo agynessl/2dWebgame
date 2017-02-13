@@ -2,8 +2,7 @@
 CS4241 Webware final project
 
 Developers:
-Qiaoyu Liao
-Jinan Hu
+Qiaoyu Liao & Jinan Hu
 
 ---------------------------------------------------------------------------
 Tutorial:
@@ -38,5 +37,4 @@ Then a request with get list will get the top 10 score list from server.
 
 ----------------------------------------------------------------------------
 Tools:
-Node.js
-Phaser
+Node.js, Phaser
